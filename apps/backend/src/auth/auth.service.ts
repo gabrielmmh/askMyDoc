@@ -5,7 +5,10 @@ import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private userService: UserService, private jwt: JwtService) { }
+    constructor(
+        private userService: UserService, 
+        private jwtService: JwtService
+    ) { }
 
     async validateUser(email: string, password: string) {
         const user = await this.userService.findByEmail(email);
@@ -19,7 +22,7 @@ export class AuthService {
 
     async login(user: any) {
         return {
-            access_token: this.jwt.sign({ sub: user.id, email: user.email }),
+            access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
         };
     }
 
@@ -32,4 +35,10 @@ export class AuthService {
         });
         return this.login(user);
     }
+
+    async generateJwtToken(user: any) {
+        const payload = { sub: user.id, email: user.email };
+        return this.jwtService.signAsync(payload);
+    }
+      
 }

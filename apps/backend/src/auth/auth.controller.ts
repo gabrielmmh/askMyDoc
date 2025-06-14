@@ -20,17 +20,13 @@ export class AuthController {
 
     @Get('google')
     @UseGuards(AuthGuard('google'))
-    async googleAuth(@Req() req: Request) {
-        // redireciona para o Google
+    googleAuth() {
+        // redireciona automaticamente para o Google
     }
 
     @Get('google/callback')
     @UseGuards(AuthGuard('google'))
     async googleAuthRedirect(@Req() req: Request) {
-        // Aqui você poderia gerar um JWT ou redirecionar com um token
-        return {
-            message: 'Google authentication successful',
-            user: req.user,
-        };
+        return req.user;
     }
 }

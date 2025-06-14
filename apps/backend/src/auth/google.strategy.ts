@@ -2,10 +2,16 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { Strategy, StrategyOptions } from 'passport-google-oauth20';
 import { ConfigService } from '@nestjs/config';
+import { UserService } from '../user/user.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-    constructor(private configService: ConfigService) {
+    constructor(
+        private configService: ConfigService,
+        private userService: UserService,
+        private authService: AuthService,
+    ) {
         const options: StrategyOptions = {
             clientID: configService.get<string>('GOOGLE_CLIENT_ID')!,
             clientSecret: configService.get<string>('GOOGLE_CLIENT_SECRET')!,
@@ -22,11 +28,19 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         done: (error: any, user?: any) => void,
     ): Promise<any> {
         const { name, emails } = profile;
-        const user = {
-            email: emails[0].value,
+        const email = emails[0].value;
+        const user = await this.userService.findOrCreate({
+            email,
             name: name.givenName,
             provider: 'google',
-        };
-        done(null, user);
+        });
+
+        const token = await this.authService.generateJwtToken(user);
+
+        done(null, {
+            message: 'Google authentication successful',
+            token,
+            user,
+        });
     }
 }
