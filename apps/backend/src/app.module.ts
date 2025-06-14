@@ -5,13 +5,19 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { DocumentModule } from './document/document.module';
+import { join } from 'path';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), 
+    ConfigModule.forRoot({
+      envFilePath: join(__dirname, '..', '..', '.env'),
+      isGlobal: true,
+    }),
     UserModule, 
     PrismaModule, 
-    AuthModule
+    AuthModule,
+    DocumentModule
   ],
   controllers: [AppController],
   providers: [AppService],
