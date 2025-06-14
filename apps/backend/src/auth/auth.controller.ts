@@ -1,5 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -14,5 +16,21 @@ export class AuthController {
     @Post('register')
     async register(@Body() body: { name: string; email: string; password: string }) {
         return this.auth.register(body);
+    }
+
+    @Get('google')
+    @UseGuards(AuthGuard('google'))
+    async googleAuth(@Req() req: Request) {
+        // redireciona para o Google
+    }
+
+    @Get('google/callback')
+    @UseGuards(AuthGuard('google'))
+    async googleAuthRedirect(@Req() req: Request) {
+        // Aqui você poderia gerar um JWT ou redirecionar com um token
+        return {
+            message: 'Google authentication successful',
+            user: req.user,
+        };
     }
 }
