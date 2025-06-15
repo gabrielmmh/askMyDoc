@@ -30,11 +30,11 @@ model Document {
 }
 
 model OcrResult {
-  id          String    @id @default(uuid())
-  document    Document  @relation(fields: [documentId], references: [id])
-  documentId  String    @unique
-  text        String
-  createdAt   DateTime  @default(now())
+  id          String   @id @default(uuid())
+  document    Document @relation(fields: [documentId], references: [id])
+  documentId  String   @unique
+  content     String
+  createdAt   DateTime @default(now())
 }
 
 model Interaction {
