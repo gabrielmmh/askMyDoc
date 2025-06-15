@@ -140,3 +140,5 @@ dist
 apps/*/node_modules
 apps/*/.next
 apps/*/.turbo
+
+apps/backend/uploads
