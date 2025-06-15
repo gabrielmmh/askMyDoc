@@ -142,3 +142,4 @@ apps/*/.next
 apps/*/.turbo
 
 apps/backend/uploads
+**/*.traineddata
