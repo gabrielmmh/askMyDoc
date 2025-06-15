@@ -1,14 +1,31 @@
+import {
+    Controller,
+    Post,
+    UseGuards,
+    UseInterceptors,
+    UploadedFile,
+    Req,
+    Get
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { DocumentService } from './document.service';
 import { Request } from 'express';
-import { UseGuards, Get, Controller, Req } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Express } from 'express'; // ✅ tipagem correta
 
 @Controller('documents')
 export class DocumentController {
-    @UseGuards(AuthGuard('jwt')) // <- usar direto aqui para isolar o problema
-    @Get('me')
-    getProfile(@Req() req: Request) {
-        console.log('>>> REQ.USER', req.user);
-        return req.user;
+    constructor(private readonly documentService: DocumentService) { }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
+    async uploadDocument(
+        @UploadedFile() file: Express.Multer.File, // ✅ aqui
+        @Req() req: Request,
+    ) {
+        const userId = (req.user as any).sub;
+        return this.documentService.saveDocument(userId, file);
     }
 
     @Get('ping')
@@ -16,3 +33,4 @@ export class DocumentController {
         return { status: 'ok' };
     }
 }
+  
