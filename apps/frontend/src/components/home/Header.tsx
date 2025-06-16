@@ -4,7 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/home/header.module.css';
 
-export default function Header() {
+type Props = {
+    onAuthChange: (logged: boolean) => void;
+};
+
+export default function Header({ onAuthChange }: Props) {
     const router = useRouter();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
@@ -14,11 +18,12 @@ export default function Header() {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
                     credentials: 'include',
                 });
-                if (res.ok) {
-                    setIsLoggedIn(true);
-                }
+                const loggedIn = res.ok;
+                setIsLoggedIn(loggedIn);
+                onAuthChange(loggedIn);
             } catch {
                 setIsLoggedIn(false);
+                onAuthChange(false);
             }
         };
         checkLogin();
@@ -29,7 +34,8 @@ export default function Header() {
             credentials: 'include',
         });
         setIsLoggedIn(false);
-        router.refresh(); 
+        onAuthChange(false);
+        router.refresh();
     };
 
     return (
@@ -43,7 +49,7 @@ export default function Header() {
                     <button onClick={() => router.push('/auth/login')} className={styles.navButton}>
                         Login
                     </button>
-                        <button onClick={() => router.push('/auth/register')} className={styles.navButton}>
+                    <button onClick={() => router.push('/auth/register')} className={styles.navButton}>
                         Register
                     </button>
                 </>

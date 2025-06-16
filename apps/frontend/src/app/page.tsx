@@ -8,13 +8,20 @@ import headerStyles from '@/styles/home/header.module.css';
 
 export default function HomePage() {
   const [refresh, setRefresh] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const triggerRefresh = () => setRefresh(prev => !prev);
+
+  // Quando o login muda, atualiza a lista
+  const handleAuthChange = (logged: boolean) => {
+    setIsLoggedIn(logged);
+    triggerRefresh();
+  };
 
   return (
     <main className={headerStyles.container}>
       <div className="bg-white rounded-xl shadow-lg p-10 w-full max-w-4xl text-center space-y-6">
-        <Header />
+        <Header onAuthChange={handleAuthChange} />
         <h1 className="text-4xl font-bold text-gray-900 mb-6">AskMyDoc</h1>
         <p className="text-gray-700 text-lg">Carregue seu documento e tire dúvidas com a IA.</p>
 
