@@ -3,7 +3,11 @@
 import { useState } from 'react';
 import uploadStyles from '@/styles/home/upload.module.css';
 
-export default function UploadForm() {
+interface UploadFormProps {
+    onDataChange?: () => void; 
+}
+
+export default function UploadForm({ onDataChange }: UploadFormProps) {
     const [file, setFile] = useState<File | null>(null);
     const [ocrText, setOcrText] = useState('');
     const [loading, setLoading] = useState(false);
@@ -49,6 +53,8 @@ export default function UploadForm() {
 
             const ocr = await ocrResponse.json();
             setOcrText(ocr.text || 'Nenhum texto extraído.');
+            
+            if (onDataChange) onDataChange();
         } catch (error: any) {
             alert(error.message || 'Erro no upload do documento.');
         } finally {
@@ -72,6 +78,8 @@ export default function UploadForm() {
 
             const data = await response.json();
             setAnswer(data.answer || 'Sem resposta disponível.');
+
+            if (onDataChange) onDataChange();
         } catch (err) {
             setAnswer('Erro ao buscar resposta.');
         } finally {

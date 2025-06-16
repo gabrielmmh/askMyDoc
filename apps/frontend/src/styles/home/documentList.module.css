@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@reference "tailwindcss";
+
+.wrapper {
+    @apply text-left w-full mt-8 ;
+}
+
+.title {
+    @apply text-2xl font-semibold;
+}
+
+.loadingText {
+    @apply text-gray-500;
+}
+
+.card {
+    @apply bg-white text-gray-900 p-6 rounded-lg w-full mt-8  shadow-lg border border-gray-200;
+}
+
+.filename {
+    @apply font-semibold;
+}
+
+.createdAt {
+    @apply text-sm text-gray-500;
+}
+
+.ocrText {
+    @apply mt-2 whitespace-pre-wrap text-gray-800;
+}
+
+.interactions {
+    @apply mt-4;
+}
+
+.interactionsList {
+    @apply list-disc ml-5 text-sm;
+}
+
+.downloadLink {
+    @apply inline-block mt-4 text-indigo-600 hover:underline text-sm;
+}
