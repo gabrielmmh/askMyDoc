@@ -11,7 +11,7 @@ export default function CallbackPage() {
 
         if (token) {
             localStorage.setItem('token', token)
-            router.push('/home')
+            router.push('/')
         } else {
             alert('Google login failed.')
             router.push('/login')

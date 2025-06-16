@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import styles from '@/styles/auth/login.module.css';
-import GoogleButton from '@/components/GoogleButton'
+import GoogleButton from '@/components/auth/GoogleButton'
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
@@ -60,7 +60,7 @@ export default function LoginForm() {
                 />
             </div>
 
-            <button type="submit" className={styles.button}>Login</button>
+            <button type="submit" className={styles.button}>Sign in</button>
 
             <div className="flex justify-center mt-4">
                 <GoogleButton onClick={handleGoogleLogin} mode="signin" />
