@@ -18,5 +18,5 @@ export default function CallbackPage() {
         }
     }, [])
 
-    return <p className="text-center mt-10">Loading...</p>
+    return <p className="text-center mt-10">Carregando...</p>
 }
