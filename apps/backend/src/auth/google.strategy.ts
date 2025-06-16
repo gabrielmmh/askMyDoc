@@ -36,7 +36,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             provider: 'google',
         });
 
-        // Só retorne o user com os campos esperados
         done(null, {
             id: user.id,
             email: user.email,
