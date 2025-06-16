@@ -35,7 +35,7 @@ export default function LoginForm() {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
+        window.location.href = `/${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
     };
 
     return (
