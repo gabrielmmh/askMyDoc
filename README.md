@@ -2,6 +2,8 @@
 
 Aplicação web que permite o upload de documentos (PDFs ou imagens), realiza OCR automático para extrair o texto e permite que o usuário faça perguntas sobre o conteúdo usando uma IA. As interações e documentos são armazenados, e ficam disponíveis em uma interface simples. O acesso exige autenticação por e-mail/senha ou login com Google.
 
+**Repositório no GitHub:** [https://github.com/gabrielmmh/askMyDoc](https://github.com/gabrielmmh/askMyDoc)
+
 ---
 
 ## Como rodar o projeto localmente
@@ -56,7 +58,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 Clone o repositório, instale as dependências e aplique as migrações do Prisma:
 
 ```bash
-git clone https://github.com/seu-usuario/askMyDoc.git
+git clone https://github.com/gabrielmmh/askMyDoc.git
 cd askMyDoc
 pnpm install
 
@@ -92,11 +94,15 @@ pnpm dev:all
 ### 4. Criar credenciais OAuth no Google
 
 1. Acesse: [https://console.cloud.google.com/apis/credentials](https://console.cloud.google.com/apis/credentials)
+
 2. Crie um projeto (se necessário).
+
 3. Configure a "Tela de consentimento OAuth" como externa.
+
 4. Crie uma credencial OAuth 2.0 com:
 
    * URI de redirecionamento: `http://localhost:3001/auth/google/callback`
+
 5. Copie o **Client ID** e o **Client Secret** e coloque no `.env`.
 
 ---
