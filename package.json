@@ -7,8 +7,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:frontend": "pnpm --filter frontend dev",
-    "dev:backend": "pnpm --filter backend start:dev",
+    "dev:frontend": "dotenv -e .env.frontend -- pnpm --filter frontend dev",
+    "dev:backend": "dotenv -e .env -- pnpm --filter backend start:dev",
     "dev:all": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\""
   },
   "devDependencies": {
