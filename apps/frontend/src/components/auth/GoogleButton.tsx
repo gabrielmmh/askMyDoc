@@ -8,7 +8,7 @@ interface Props {
 }
   
 export default function GoogleButton({ onClick, mode = 'signin' }: Props) {
-    const label = mode === 'signin' ? 'Sign in with Google' : 'Sign up with Google'
+    const label = mode === 'signin' ? 'Continuar com o Google' : 'Inscrever-se com o Google'
   
     return (
         <button
