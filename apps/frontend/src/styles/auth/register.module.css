@@ -34,3 +34,7 @@
 .linkText {
     @apply text-center text-sm text-gray-600;
 }
+
+.link {
+    @apply text-indigo-600 hover:underline;
+}
