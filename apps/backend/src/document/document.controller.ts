@@ -6,6 +6,7 @@ import {
     UploadedFile,
     Req,
     Param,
+    Body,
     Get
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -40,7 +41,7 @@ export class DocumentController {
         @UploadedFile() file: Express.Multer.File,
         @Req() req: Request,
     ) {
-        console.log('req.user:', req.user); // veja se sub está presente
+        console.log('req.user:', req.user);
 
         const user = req.user as { sub: string };
         const result = await this.documentService.saveDocument(user.sub, file);
@@ -53,6 +54,18 @@ export class DocumentController {
         const user = req.user as { sub: string; email: string };
         return this.documentService.processOcr(documentId, user.sub);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Post(':id/ask')
+    async ask(
+        @Param('id') id: string,
+        @Req() req: Request,
+        @Body('question') question: string
+    ) {
+        const user = req.user as { sub: string };
+        return this.documentService.askQuestion(id, user.sub, question);
+    }
+
 
     @Get('ping')
     ping() {
