@@ -13,7 +13,7 @@ interface DocumentItem {
     id: string;
     filename: string;
     createdAt: string;
-    ocrResult?: { text: string };
+    ocrResult?: { content: string };
     interactions: Interaction[];
 }
 
