@@ -2,14 +2,36 @@
 
 import { useState } from 'react';
 import styles from '@/styles/auth/login.module.css';
+import GoogleButton from '@/components/GoogleButton'
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Login:', { email, senha });
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password: senha }),
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.message || 'Login failed');
+            }
+
+            window.location.href = '/';
+        } catch (error: any) {
+            alert(error.message);
+        }
+    };
+
+    const handleGoogleLogin = () => {
+        window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
     };
 
     return (
@@ -40,9 +62,13 @@ export default function LoginForm() {
 
             <button type="submit" className={styles.button}>Login</button>
 
+            <div className="flex justify-center mt-4">
+                <GoogleButton onClick={handleGoogleLogin} mode="signin" />
+            </div>
+
             <p className={styles.linkText}>
                 Need to create an account?{' '}
-                <a href="#" className={styles.link}>Create Account</a>
+                <a href="register" className={styles.link}>Create Account</a>
             </p>
         </form>
     );
