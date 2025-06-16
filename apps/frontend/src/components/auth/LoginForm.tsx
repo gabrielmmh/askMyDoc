@@ -24,21 +24,21 @@ export default function LoginForm() {
                 throw new Error(err.message || 'Erro ao fazer login');
             }
 
-            window.location.href = '/';
+            window.location.href = '/'; // redireciona após login com e-mail/senha
         } catch (error) {
             if (error instanceof Error) {
                 alert(error.message);
             } else {
                 alert('Erro desconhecido ao fazer login.');
             }
-        }        
+        }
     };
 
     const handleGoogleLogin = () => {
         const base = process.env.NEXT_PUBLIC_API_URL!;
         const url = new URL('/auth/google', base);
-        window.location.href = url.toString();
-    };      
+        window.open(url.toString(), '_self');
+    };
 
     return (
         <form onSubmit={handleSubmit} className={styles.form}>

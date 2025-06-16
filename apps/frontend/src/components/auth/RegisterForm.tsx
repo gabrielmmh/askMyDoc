@@ -37,8 +37,10 @@ export default function RegisterForm() {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
-    };
+        const base = process.env.NEXT_PUBLIC_API_URL!;
+        const url = new URL('/auth/google', base);
+        window.open(url.toString(), '_self');
+    };    
 
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
