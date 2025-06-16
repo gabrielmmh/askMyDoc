@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import styles from "@/styles/auth/register.module.css";
-import GoogleButton from "@/components/GoogleButton";
+import GoogleButton from "@/components/auth/GoogleButton";
 
 export default function RegisterForm() {
     const [name, setName] = useState("");
