@@ -16,7 +16,7 @@ export default function CallbackPage() {
             alert('Google login failed.')
             router.push('/login')
         }
-    }, [])
+    }, [router])
 
     return <p className="text-center mt-10">Carregando...</p>
 }
