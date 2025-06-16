@@ -25,9 +25,13 @@ export default function LoginForm() {
             }
 
             window.location.href = '/';
-        } catch (error: any) {
-            alert(error.message);
-        }
+        } catch (error) {
+            if (error instanceof Error) {
+                alert(error.message);
+            } else {
+                alert('Erro desconhecido ao fazer login.');
+            }
+        }        
     };
 
     const handleGoogleLogin = () => {
