@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import styles from '@/styles/auth/login.module.css';
-import GoogleButton from '@/components/auth/GoogleButton'
+import GoogleButton from '@/components/auth/GoogleButton';
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ export default function LoginForm() {
 
             if (!response.ok) {
                 const err = await response.json();
-                throw new Error(err.message || 'Login failed');
+                throw new Error(err.message || 'Erro ao fazer login');
             }
 
             window.location.href = '/';
@@ -37,7 +37,7 @@ export default function LoginForm() {
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
             <div>
-                <label htmlFor="email" className={styles.label}>Email</label>
+                <label htmlFor="email" className={styles.label}>E-mail</label>
                 <input
                     id="email"
                     type="email"
@@ -49,7 +49,7 @@ export default function LoginForm() {
             </div>
 
             <div>
-                <label htmlFor="senha" className={styles.label}>Password</label>
+                <label htmlFor="senha" className={styles.label}>Senha</label>
                 <input
                     id="senha"
                     type="password"
@@ -60,15 +60,15 @@ export default function LoginForm() {
                 />
             </div>
 
-            <button type="submit" className={styles.button}>Sign in</button>
+            <button type="submit" className={styles.button}>Entrar</button>
 
             <div className="flex justify-center mt-4">
                 <GoogleButton onClick={handleGoogleLogin} mode="signin" />
             </div>
 
             <p className={styles.linkText}>
-                Need to create an account?{' '}
-                <a href="register" className={styles.link}>Create Account</a>
+                Ainda não tem uma conta?{' '}
+                <a href="register" className={styles.link}>Criar conta</a>
             </p>
         </form>
     );
