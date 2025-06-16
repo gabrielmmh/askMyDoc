@@ -29,18 +29,17 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     ): Promise<any> {
         const { name, emails } = profile;
         const email = emails[0].value;
+
         const user = await this.userService.findOrCreate({
             email,
             name: name.givenName,
             provider: 'google',
         });
 
-        const token = await this.authService.generateJwtToken(user);
-
+        // Só retorne o user com os campos esperados
         done(null, {
-            message: 'Google authentication successful',
-            token,
-            user,
+            id: user.id,
+            email: user.email,
         });
-    }
+    }    
 }

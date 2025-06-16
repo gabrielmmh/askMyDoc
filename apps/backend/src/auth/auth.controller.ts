@@ -8,9 +8,21 @@ export class AuthController {
     constructor(private auth: AuthService) { }
 
     @Post('login')
-    async login(@Body() body: { email: string; password: string }) {
+    async login(
+        @Body() body: { email: string; password: string },
+        @Res({ passthrough: true }) res: Response
+    ) {
         const user = await this.auth.validateUser(body.email, body.password);
-        return this.auth.login(user);
+        const { access_token } = await this.auth.login(user);
+
+        res.cookie('access_token', access_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
+        });
+
+        return { message: 'Login realizado com sucesso' };
     }
 
     @Post('register')
@@ -36,7 +48,13 @@ export class AuthController {
             maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
         });
 
-        return res.redirect('http://localhost:3001');
+        return res.redirect('http://localhost:3000');
+    }
+
+    @Get('logout')
+    logout(@Res() res: Response) {
+        res.clearCookie('access_token');
+        return res.status(200).json({ message: 'Logout realizado com sucesso' });
     }
 
     @Get('me')
