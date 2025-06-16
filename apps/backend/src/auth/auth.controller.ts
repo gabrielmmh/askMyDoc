@@ -48,7 +48,13 @@ export class AuthController {
             maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
         });
 
-        return res.redirect('http://localhost:3000');
+        const redirectUrl = process.env.FRONTEND_URL;
+
+        if (!redirectUrl) {
+            throw new Error('FRONTEND_URL is not defined in the environment variables.');
+        }
+
+        return res.redirect(redirectUrl);
     }
 
     @Get('logout')
