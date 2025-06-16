@@ -20,13 +20,31 @@ export class DocumentController {
 
     @UseGuards(JwtAuthGuard)
     @Post('upload')
-    @UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
-    async uploadDocument(
+    @UseInterceptors(
+        FileInterceptor('file', {
+            dest: './uploads',
+            limits: { fileSize: 10 * 1024 * 1024 },
+            fileFilter: (req, file, cb) => {
+                if (
+                    file.mimetype === 'application/pdf' ||
+                    file.mimetype.startsWith('image/')
+                ) {
+                    cb(null, true);
+                } else {
+                    cb(new Error('Tipo de arquivo não suportado'), false);
+                }
+            },
+        }),
+    )
+    async uploadFile(
         @UploadedFile() file: Express.Multer.File,
         @Req() req: Request,
     ) {
-        const userId = (req.user as any).sub;
-        return this.documentService.saveDocument(userId, file);
+        console.log('req.user:', req.user); // veja se sub está presente
+
+        const user = req.user as { sub: string };
+        const result = await this.documentService.saveDocument(user.sub, file);
+        return result;
     }
 
     @UseGuards(JwtAuthGuard)

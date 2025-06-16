@@ -40,8 +40,10 @@ export class DocumentService {
 
         const text = result.data.text;
 
-        await this.prisma.ocrResult.create({
-            data: {
+        await this.prisma.ocrResult.upsert({
+            where: { documentId: document.id },
+            update: { content: text },
+            create: {
                 documentId: document.id,
                 content: text,
             },
@@ -49,7 +51,7 @@ export class DocumentService {
 
         return {
             message: 'OCR completed',
-            text: text.slice(0, 200) + '...', 
+            text: text.slice(0, 200) + '...',
         };
-      }
+    }      
 }
