@@ -47,10 +47,10 @@ export default function Header({ onAuthChange }: Props) {
             ) : (
                 <>
                     <button onClick={() => router.push('/auth/login')} className={styles.navButton}>
-                        Login
+                        Entrar
                     </button>
                     <button onClick={() => router.push('/auth/register')} className={styles.navButton}>
-                        Register
+                        Criar conta
                     </button>
                 </>
             )}
