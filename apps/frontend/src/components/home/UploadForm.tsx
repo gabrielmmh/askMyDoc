@@ -1,13 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import uploadStyles from '@/styles/home/upload.module.css';
 
 interface UploadFormProps {
-    onDataChange?: () => void; 
+    onDataChange?: () => void;
+    isLoggedIn: boolean;
 }
 
-export default function UploadForm({ onDataChange }: UploadFormProps) {
+export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps) {
+    const router = useRouter();
     const [file, setFile] = useState<File | null>(null);
     const [ocrText, setOcrText] = useState('');
     const [loading, setLoading] = useState(false);
@@ -24,6 +27,13 @@ export default function UploadForm({ onDataChange }: UploadFormProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!isLoggedIn) {
+            router.push('/auth/login');
+            return;
+        }
+
+        if (!file) return;
+
         if (!file) return;
 
         const formData = new FormData();

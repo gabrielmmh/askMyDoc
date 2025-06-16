@@ -8,10 +8,12 @@ import headerStyles from '@/styles/home/header.module.css';
 
 export default function HomePage() {
   const [refresh, setRefresh] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const triggerRefresh = () => setRefresh(prev => !prev);
 
-  const handleAuthChange = () => {
+  const handleAuthChange = (logged: boolean) => {
+    setIsLoggedIn(logged);
     triggerRefresh();
   };
 
@@ -22,7 +24,7 @@ export default function HomePage() {
         <h1 className="text-4xl font-bold text-gray-900 mb-6">AskMyDoc</h1>
         <p className="text-gray-700 text-lg">Carregue seu documento e tire dúvidas com a IA.</p>
 
-        <UploadForm onDataChange={triggerRefresh} />
+        <UploadForm isLoggedIn={isLoggedIn} onDataChange={triggerRefresh} />
         <DocumentList refreshSignal={refresh} />
       </div>
     </main>
