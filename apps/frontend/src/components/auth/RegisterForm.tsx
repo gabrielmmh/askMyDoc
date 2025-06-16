@@ -38,7 +38,7 @@ export default function RegisterForm() {
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
             <div>
-                <label className={styles.label}>Name</label>
+                <label className={styles.label}>Nome</label>
                 <input
                     type="text"
                     value={name}
@@ -48,7 +48,7 @@ export default function RegisterForm() {
                 />
             </div>
             <div>
-                <label className={styles.label}>Email</label>
+                <label className={styles.label}>E-mail</label>
                 <input
                     type="email"
                     value={email}
@@ -58,7 +58,7 @@ export default function RegisterForm() {
                 />
             </div>
             <div>
-                <label className={styles.label}>Password</label>
+                <label className={styles.label}>Senha</label>
                 <input
                     type="password"
                     value={senha}
@@ -68,7 +68,7 @@ export default function RegisterForm() {
                 />
             </div>
             <button type="submit" className={styles.button}>
-                Sign up
+                Criar conta
             </button>
 
             <div className="flex justify-center mt-4">
@@ -76,8 +76,8 @@ export default function RegisterForm() {
             </div>
 
             <p className={styles.linkText}>
-                Already have an account?{' '}
-                <a href="/auth/login" className={styles.link}>Sign in</a>
+                Já tem uma conta?{' '}
+                <a href="/auth/login" className={styles.link}>Entrar</a>
             </p>
         </form>
     );
