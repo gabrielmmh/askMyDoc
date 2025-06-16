@@ -8,13 +8,10 @@ import headerStyles from '@/styles/home/header.module.css';
 
 export default function HomePage() {
   const [refresh, setRefresh] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const triggerRefresh = () => setRefresh(prev => !prev);
 
-  // Quando o login muda, atualiza a lista
-  const handleAuthChange = (logged: boolean) => {
-    setIsLoggedIn(logged);
+  const handleAuthChange = () => {
     triggerRefresh();
   };
 
