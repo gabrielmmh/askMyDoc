@@ -33,17 +33,30 @@ export default function DocumentList({ refreshSignal }: Props) {
                     credentials: 'include',
                 });
                 const data = await res.json();
-                console.log(data); // 👈 inspecione o conteúdo retornado
-                setDocuments(data);
-            } catch {
+
+                if (!res.ok) {
+                    console.error('Erro ao buscar documentos:', data);
+                    setDocuments([]);
+                    return;
+                }
+
+                if (Array.isArray(data)) {
+                    setDocuments(data);
+                } else {
+                    console.error('Formato inesperado:', data);
+                    setDocuments([]);
+                }
+            } catch (err) {
+                console.error('Erro na requisição:', err);
                 alert('Erro ao carregar documentos');
+                setDocuments([]);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchDocuments();
-    }, [refreshSignal]);
+    }, [refreshSignal]);    
 
     return (
         <div className={styles.wrapper}>
