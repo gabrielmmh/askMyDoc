@@ -12,6 +12,7 @@
     "dev:all": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\""
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "dotenv-cli": "^8.0.0"
   }
 }
