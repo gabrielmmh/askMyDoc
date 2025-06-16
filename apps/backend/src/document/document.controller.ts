@@ -7,13 +7,15 @@ import {
     Req,
     Param,
     Body,
+    Res,
     Get
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DocumentService } from './document.service';
-import { Request } from 'express';
-import { Express } from 'express';
+import { Request, Express, Response } from 'express';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 @Controller('documents')
 export class DocumentController {
@@ -66,10 +68,29 @@ export class DocumentController {
         return this.documentService.askQuestion(id, user.sub, question);
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get()
+    async getAllDocuments(@Req() req: Request) {
+        const user = req.user as any;
+        return this.documentService.findAllByUser(user.id);
+    }
 
-    @Get('ping')
-    ping() {
-        return { status: 'ok' };
+    @UseGuards(JwtAuthGuard)
+    @Get(':id/download')
+    async downloadWithAnnotations(
+        @Param('id') id: string,
+        @Req() req: Request,
+        @Res() res: Response
+    ) {
+        const user = req.user as { sub: string };
+
+        const filePath = await this.documentService.generateDownloadFile(id, user.sub);
+
+        res.setHeader('Content-Disposition', 'attachment; filename=documento-com-anotacoes.txt');
+        res.setHeader('Content-Type', 'text/plain');
+
+        const fileStream = createReadStream(filePath);
+        fileStream.pipe(res);
     }
 }
   
