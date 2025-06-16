@@ -55,8 +55,12 @@ export default function UploadForm({ onDataChange }: UploadFormProps) {
             setOcrText(ocr.text || 'Nenhum texto extraído.');
             
             if (onDataChange) onDataChange();
-        } catch (error: any) {
-            alert(error.message || 'Erro no upload do documento.');
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                alert(error.message);
+            } else {
+                alert('Erro desconhecido no upload do documento.');
+            }
         } finally {
             setLoading(false);
         }
@@ -80,7 +84,7 @@ export default function UploadForm({ onDataChange }: UploadFormProps) {
             setAnswer(data.answer || 'Sem resposta disponível.');
 
             if (onDataChange) onDataChange();
-        } catch (err) {
+        } catch {
             setAnswer('Erro ao buscar resposta.');
         } finally {
             setAsking(false);
