@@ -42,7 +42,7 @@ export default function Header({ onAuthChange }: Props) {
         <header className="flex justify-end space-x-4 mb-8">
             {isLoggedIn ? (
                 <button onClick={handleLogout} className={styles.navButton}>
-                    Leave
+                    Sair
                 </button>
             ) : (
                 <>
