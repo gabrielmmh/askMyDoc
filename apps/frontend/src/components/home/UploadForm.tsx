@@ -104,12 +104,23 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
     return (
         <form onSubmit={handleSubmit} className={uploadStyles.wrapper}>
             <label className={uploadStyles.label}>Selecione um PDF:</label>
-            <input
-                type="file"
-                accept="application/pdf,image/*"
-                onChange={handleFileChange}
-                className={uploadStyles.fileInput}
-            />
+
+            <div className={uploadStyles.uploadGroup}>
+                <label htmlFor="file-upload" className={uploadStyles.uploadLabel}>
+                    Escolher arquivo
+                </label>
+                <input
+                    id="file-upload"
+                    type="file"
+                    accept="application/pdf,image/*"
+                    onChange={handleFileChange}
+                    className={uploadStyles.uploadInputHidden}
+                />
+                <span className={uploadStyles.uploadFilename}>
+                    {file ? file.name : 'Nenhum arquivo escolhido'}
+                </span>
+            </div>
+
             <button
                 type="submit"
                 disabled={loading}
