@@ -9,6 +9,8 @@ import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
 import * as fsSync from 'fs';
+import { extractTextFromPdf, runOcrOnPdf, runOcrOnImage } from '../utils';
+
 
 @Injectable()
 export class DocumentService {
@@ -18,11 +20,17 @@ export class DocumentService {
     ) { }
 
     async saveDocument(userId: string, file: Express.Multer.File) {
+        const ext = path.extname(file.originalname);
+        const fixedPath = file.path.endsWith(ext) ? file.path : `${file.path}${ext}`;
+
+        // Renomeia o arquivo fisicamente para ter a extensão
+        await fs.rename(file.path, fixedPath);
+
         const document = await this.prisma.document.create({
             data: {
                 userId,
                 filename: file.originalname,
-                filepath: file.path,
+                filepath: fixedPath,
             },
         });
 
@@ -32,49 +40,32 @@ export class DocumentService {
             message: 'Upload realizado com sucesso',
             documentId: document.id,
         };
-    }
+    }    
 
     async processOcr(documentId: string, userId: string) {
         const document = await this.prisma.document.findFirst({
             where: { id: documentId, userId },
         });
 
-        if (!document) {
-            throw new NotFoundException('Documento não encontrado ou não pertence ao usuário');
+        if (!document) throw new NotFoundException('Documento não encontrado');
+
+        const ext = path.extname(document.filepath).toLowerCase();
+        let text = '';
+
+        if (ext === '.pdf') {
+            text = (await extractTextFromPdf(document.filepath)) || await runOcrOnPdf(document.filepath);
+        } else {
+            text = await runOcrOnImage(document.filepath);
         }
-
-        const imagePath = document.filepath;
-
-        console.log(`[OCR] Iniciando reconhecimento de texto para: ${imagePath}`);
-
-        const result = await Tesseract.recognize(imagePath, 'eng', {
-            logger: m => console.log(`[OCR] ${m.status} - ${Math.round(m.progress * 100)}%`),
-        });
-
-        const text = result.data.text;
-
-        console.log(`[OCR] Texto extraído com sucesso.`);
 
         await this.prisma.ocrResult.upsert({
             where: { documentId: document.id },
             update: { content: text },
-            create: {
-                documentId: document.id,
-                content: text,
-            },
+            create: { documentId: document.id, content: text },
         });
 
-        try {
-            await fs.unlink(imagePath);
-            console.log(`[OCR] Arquivo temporário removido: ${imagePath}`);
-        } catch (err) {
-            console.error(`[OCR] Erro ao remover o arquivo ${imagePath}:`, err);
-        }
-
-        return {
-            message: 'OCR concluído com sucesso',
-            text,
-        };
+        await fs.unlink(document.filepath).catch(() => { });
+        return { message: 'OCR concluído com sucesso', text };
     }
 
     async askQuestion(documentId: string, userId: string, question: string) {
