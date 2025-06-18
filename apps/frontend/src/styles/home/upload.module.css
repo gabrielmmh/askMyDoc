@@ -20,7 +20,7 @@
 }
 
 .button {
-    @apply bg-white border-1 text-black font-sans py-1.5 px-6 rounded-2xl hover:border-amber-600 transition duration-400 ease-in-out text-base shadow-none appearance-none; 
+    @apply bg-white border-1 border-black text-black font-sans py-1.5 px-6 rounded-2xl hover:border-amber-600 transition duration-400 ease-in-out text-base shadow-none appearance-none; 
 }
 
 .askWrapper {
