@@ -19,7 +19,7 @@ export default function HomePage() {
 
   return (
     <main className={headerStyles.container}>
-      <div className="bg-white rounded-xl shadow-lg p-10 w-full max-w-4xl text-center space-y-6">
+      <div className="bg-white rounded-xl shadow-lg p-10 w-full text-center space-y-6">
         <Header onAuthChange={handleAuthChange} />
         <h1 className="text-4xl font-bold text-gray-900 mb-6">AskMyDoc</h1>
         <p className="text-gray-700 text-lg">Carregue seu documento e tire dúvidas com a IA.</p>
