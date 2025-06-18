@@ -3,11 +3,13 @@
 import { useState } from "react";
 import styles from "@/styles/auth/register.module.css";
 import GoogleButton from "@/components/auth/GoogleButton";
+import Link from 'next/link';
 
 export default function RegisterForm() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -32,6 +34,8 @@ export default function RegisterForm() {
             } else {
                 alert('Erro desconhecido ao fazer cadastro.');
             }
+        } finally {
+            setLoading(false);
         }
         
     };
@@ -74,8 +78,9 @@ export default function RegisterForm() {
                     required
                 />
             </div>
-            <button type="submit" className={styles.button}>
-                Criar conta
+
+            <button type="submit" className={styles.button} disabled={loading}>
+                {loading ? 'Criando...' : 'Criar conta'}
             </button>
 
             <div className="flex justify-center mt-4">
@@ -84,7 +89,7 @@ export default function RegisterForm() {
 
             <p className={styles.linkText}>
                 Já tem uma conta?{' '}
-                <a href="/auth/login" className={styles.link}>Entrar</a>
+                <Link href="login" className={styles.link}>Entrar</Link>
             </p>
         </form>
     );

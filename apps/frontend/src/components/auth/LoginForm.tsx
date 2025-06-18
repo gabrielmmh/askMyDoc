@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import styles from '@/styles/auth/login.module.css';
 import GoogleButton from '@/components/auth/GoogleButton';
+import Link from 'next/link';
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,13 +26,15 @@ export default function LoginForm() {
                 throw new Error(err.message || 'Erro ao fazer login');
             }
 
-            window.location.href = '/'; // redireciona após login com e-mail/senha
+            window.location.href = '/';
         } catch (error) {
             if (error instanceof Error) {
                 alert(error.message);
             } else {
                 alert('Erro desconhecido ao fazer login.');
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -66,7 +70,9 @@ export default function LoginForm() {
                 />
             </div>
 
-            <button type="submit" className={styles.button}>Entrar</button>
+            <button type="submit" className={styles.button} disabled={loading}>
+                {loading ? 'Entrando...' : 'Entrar'}
+            </button>
 
             <div className="flex justify-center mt-4">
                 <GoogleButton onClick={handleGoogleLogin} mode="signin" />
@@ -74,7 +80,7 @@ export default function LoginForm() {
 
             <p className={styles.linkText}>
                 Ainda não tem uma conta?{' '}
-                <a href="register" className={styles.link}>Criar conta</a>
+                <Link href="register" className={styles.link}>Criar conta</Link>
             </p>
         </form>
     );
