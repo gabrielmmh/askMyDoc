@@ -17,6 +17,9 @@ module.exports = {
           'logo-red': '#ea4335',
         },
       },
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'],
+      },
     },
   },
   plugins: [],
