@@ -5,6 +5,7 @@ import Header from '@/components/home/Header';
 import UploadForm from '@/components/home/UploadForm';
 import DocumentList from '@/components/home/DocumentList';
 import headerStyles from '@/styles/home/header.module.css';
+import "./globals.css";
 
 export default function HomePage() {
   const [refresh, setRefresh] = useState(false);
