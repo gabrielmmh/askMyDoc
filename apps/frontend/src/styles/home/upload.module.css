@@ -10,6 +10,7 @@
 .label {
     @apply text-base font-medium text-gray-700 mb-2;
 }
+
 .resultBox {
     @apply bg-white text-gray-900 p-6 rounded-lg w-full mt-8 max-w-3xl shadow-lg border border-gray-200;
 }
@@ -19,7 +20,7 @@
 }
 
 .button {
-    @apply bg-indigo-800 text-white font-semibold py-1 px-4 rounded-md mt-8 hover:bg-indigo-900 transition text-sm;
+    @apply bg-white border-1 text-black font-sans py-1.5 px-6 rounded-2xl hover:border-amber-600 transition duration-400 ease-in-out text-base shadow-none appearance-none; 
 }
 
 .askWrapper {
@@ -47,7 +48,7 @@
 }
 
 .uploadLabel {
-    @apply cursor-pointer bg-indigo-800 hover:bg-indigo-900 text-white transition font-medium py-2 px-6 rounded-full text-sm;
+    @apply bg-white border-1 text-black font-sans py-1.5 px-6 rounded-2xl hover:border-amber-600 transition duration-400 ease-in-out text-sm shadow-none appearance-none; 
 }
 
 .uploadInputHidden {
