@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import styles from "@/styles/auth/register.module.css";
+import styles from "@/styles/auth/auth.module.css";
 import GoogleButton from "@/components/auth/GoogleButton";
 import Link from 'next/link';
 

@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import styles from '@/styles/googleButton.module.css'
+import styles from '@/styles/auth/googleButton.module.css'
 
 interface Props {
     onClick: () => void
