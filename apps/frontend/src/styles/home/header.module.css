@@ -28,7 +28,7 @@
 }
 
 .navButton {
-    @apply bg-indigo-800 text-white font-semibold py-1 px-4 rounded-md hover:bg-indigo-900 transition text-sm;
+    @apply bg-indigo-800 text-white font-sans py-2 px-6 rounded-2xl hover:bg-indigo-900 transition text-base;
 }
 
 .linkText {
