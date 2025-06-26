@@ -4,23 +4,23 @@
 @reference "tailwindcss";
 
 .wrapper {
-    @apply text-left w-full mt-8 ;
+    @apply flex flex-col items-center w-full mt-6 space-y-6;
 }
 
 .title {
-    @apply text-2xl font-semibold;
+    @apply text-2xl font-semibold text-amber-600;
 }
 
 .loadingText {
-    @apply text-gray-500;
+    @apply text-gray-500 text-sm;
 }
 
 .card {
-    @apply bg-white text-gray-900 p-6 rounded-lg w-full mt-8  shadow-lg border border-gray-200;
+    @apply bg-white text-gray-900 p-6 rounded-lg w-full max-w-3xl shadow-lg border border-gray-200 space-y-4;
 }
 
 .filename {
-    @apply font-semibold;
+    @apply text-lg font-semibold text-gray-900;
 }
 
 .createdAt {
@@ -28,17 +28,57 @@
 }
 
 .ocrText {
-    @apply mt-2 whitespace-pre-wrap text-gray-800;
+    @apply text-sm text-gray-800 whitespace-pre-wrap bg-gray-50 p-3 rounded-md border border-gray-200;
 }
 
 .interactions {
-    @apply mt-4;
+    @apply my-5 text-start;
 }
 
 .interactionsList {
-    @apply list-disc ml-5 text-sm;
+    @apply text-sm text-gray-800 space-y-1 text-center;
 }
 
 .downloadLink {
-    @apply inline-block mt-4 text-indigo-600 hover:underline text-sm;
+    @apply inline-block mt-2 text-amber-600 hover:underline text-sm font-medium;
+}
+
+.processOcrBtn {
+    @apply mt-2 px-4 py-2 bg-indigo-50 border border-indigo-400 text-indigo-700 text-sm rounded-md hover:bg-indigo-100 transition;
+}
+
+.header {
+    @apply flex justify-between items-center;
+}
+
+.trashButton {
+    @apply transition;
+}
+
+.modalOverlay {
+    @apply fixed inset-0 flex items-center justify-center z-50 bg-black/80 opacity-0 pointer-events-none transition-opacity duration-300;
+}
+
+.modalOverlayVisible {
+    @apply opacity-100 pointer-events-auto;
+}
+
+.modal {
+    @apply bg-white p-6 rounded-lg shadow-lg max-w-sm w-full transform scale-95 opacity-0 transition-all duration-300;
+}
+
+.modalVisible {
+    @apply scale-100 opacity-100;
+}
+
+.modalActions {
+    @apply mt-4 flex flex-row justify-center gap-4;
+}
+
+.confirmDelete {
+    @apply bg-white border-1 w-1/4 text-center border-red-700 text-black font-sans py-1.5 rounded-2xl hover:border-red-400 transition duration-400 ease-in-out text-base shadow-none appearance-none;
+}
+
+.cancel {
+    @apply bg-white border-1 w-1/4 text-center border-black text-black font-sans py-1.5 rounded-2xl hover:border-amber-600 transition duration-400 ease-in-out text-base shadow-none appearance-none;
 }
