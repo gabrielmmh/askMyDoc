@@ -16,7 +16,7 @@
 }
 
 .card {
-    @apply bg-white text-gray-900 p-6 rounded-lg w-full max-w-3xl shadow-lg border border-gray-200 space-y-4;
+    @apply bg-white text-base text-start text-gray-900 p-6 rounded-lg w-full max-w-3xl shadow-lg border border-gray-200 space-y-4;
 }
 
 .filename {
@@ -32,11 +32,11 @@
 }
 
 .interactions {
-    @apply my-5 text-start;
+    @apply my-5 text-start block text-base;
 }
 
 .interactionsList {
-    @apply text-sm text-gray-800 space-y-1 text-center;
+    @apply text-sm text-gray-800 space-y-1 text-start;
 }
 
 .downloadLink {
@@ -51,8 +51,12 @@
     @apply flex justify-between items-center;
 }
 
-.trashButton {
-    @apply transition;
+.headerButtons {
+    @apply flex items-center space-x-2; 
+}
+
+.iconButton {
+    @apply text-black border-none bg-transparent cursor-auto hover:text-amber-600 transition duration-500;
 }
 
 .modalOverlay {
@@ -81,4 +85,22 @@
 
 .cancel {
     @apply bg-white border-1 w-1/4 text-center border-black text-black font-sans py-1.5 rounded-2xl hover:border-amber-600 transition duration-400 ease-in-out text-base shadow-none appearance-none;
+}
+
+.collapsedContainer {
+    @apply overflow-hidden transform scale-y-0 transition-transform duration-500 ease-in-out;
+    transform-origin: top;
+}
+
+.expandedContainer {
+    @apply overflow-hidden transform scale-y-100 transition-transform duration-500 ease-in-out;
+    transform-origin: top;
+}
+
+.collapsible {
+    @apply overflow-hidden transition-[height] duration-500 ease-in-out;
+}
+
+.toggleButton {
+    @apply mt-2 text-black border-none bg-transparent cursor-auto hover:text-amber-600 transition duration-500;
 }
