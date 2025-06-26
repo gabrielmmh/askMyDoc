@@ -9,7 +9,7 @@ import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
 import * as fsSync from 'fs';
-import { extractTextFromPdf, runOcrOnPdf, runOcrOnImage } from '../utils';
+import { extractTextFromPdf, runOcrOnPdf, runOcrOnImage, cleanOcrText} from '../utils';
 
 
 @Injectable()
@@ -57,6 +57,8 @@ export class DocumentService {
         } else {
             text = await runOcrOnImage(document.filepath);
         }
+
+        text = cleanOcrText(text);
 
         await this.prisma.ocrResult.upsert({
             where: { documentId: document.id },
@@ -150,4 +152,33 @@ export class DocumentService {
     writeFileSync(filePath, finalText);
     return filePath;
     }
+
+    async deleteDocument(documentId: string, userId: string) {
+        const document = await this.prisma.document.findFirst({
+            where: { id: documentId, userId },
+            include: {
+                ocrResult: true,
+                interactions: true,
+            },
+        });
+
+        if (!document) {
+            throw new NotFoundException('Documento não encontrado');
+        }
+
+        if (document.filepath) {
+            try {
+                await fs.unlink(document.filepath);
+            } catch (err) {
+                // arquivo pode já ter sido deletado após o OCR, então ignoramos erro
+            }
+        }
+
+        await this.prisma.interaction.deleteMany({ where: { documentId } });
+        await this.prisma.ocrResult.deleteMany({ where: { documentId } });
+        await this.prisma.document.delete({ where: { id: documentId } });
+
+        return { message: 'Documento excluído com sucesso' };
+    }
+    
 }

@@ -8,7 +8,8 @@ import {
     Param,
     Body,
     Res,
-    Get
+    Get,
+    Delete
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -92,5 +93,16 @@ export class DocumentController {
         const fileStream = createReadStream(filePath);
         fileStream.pipe(res);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete(':id')
+    async delete (
+        @Param('id') id: string,
+            @Req() req: Request
+    ) {
+        const user = req.user as { sub: string };
+        return this.documentService.deleteDocument(id, user.sub);
+    }
+
 }
   
