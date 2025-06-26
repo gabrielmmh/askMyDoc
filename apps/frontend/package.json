@@ -12,9 +12,11 @@
     "@fontsource/poppins": "^5.2.6",
     "@heroicons/react": "^2.2.0",
     "dotenv": "^16.5.0",
+    "lucide-react": "^0.523.0",
     "next": "15.3.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
