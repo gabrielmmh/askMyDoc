@@ -16,7 +16,7 @@
 }
 
 .resultTitle {
-    @apply text-xl font-semibold mb-4 text-indigo-800;
+    @apply text-xl font-semibold mb-4 text-amber-600;
 }
 
 .button {
@@ -28,7 +28,7 @@
 }
 
 .askInput {
-    @apply w-full text-sm text-gray-800 bg-white border border-gray-300 rounded-md shadow-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400;
+    @apply w-full text-sm text-gray-800 bg-white border border-gray-300 rounded-md shadow-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-600;
 }
 
 .answerBox {
@@ -36,7 +36,7 @@
 }
 
 .answerTitle {
-    @apply text-sm font-semibold text-indigo-800 mb-1;
+    @apply text-sm font-semibold text-amber-600 mb-1;
 }
 
 .answerText {

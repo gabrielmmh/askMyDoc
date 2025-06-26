@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import uploadStyles from '@/styles/home/upload.module.css';
+import ReactMarkdown from 'react-markdown';
 
 interface UploadFormProps {
     onDataChange?: () => void;
@@ -164,7 +165,11 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                     {answer && (
                         <div className={uploadStyles.resultBox}>
                             <h3 className={uploadStyles.resultTitle}>Resposta:</h3>
-                            <p className={uploadStyles.answerText}>{answer}</p>
+                            <div className={uploadStyles.answerText}>
+                                <ReactMarkdown>
+                                    {answer}
+                                </ReactMarkdown>
+                            </div>
                         </div>
                     )}
                 </div>
