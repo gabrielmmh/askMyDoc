@@ -30,7 +30,7 @@ model Document {
 
 model OcrResult {
   id          String   @id @default(uuid())
-  document    Document @relation(fields: [documentId], references: [id])
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
   documentId  String   @unique
   content     String
   createdAt   DateTime @default(now())
@@ -38,7 +38,7 @@ model OcrResult {
 
 model Interaction {
   id          String    @id @default(uuid())
-  document    Document  @relation(fields: [documentId], references: [id])
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
   documentId  String
   question    String
   answer      String
