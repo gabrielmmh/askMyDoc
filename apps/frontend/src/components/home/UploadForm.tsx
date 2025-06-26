@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import uploadStyles from '@/styles/home/upload.module.css';
+import styles from '@/styles/home/upload.module.css';
 import ReactMarkdown from 'react-markdown';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface UploadFormProps {
     onDataChange?: () => void;
@@ -20,21 +21,41 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
     const [documentId, setDocumentId] = useState('');
     const [asking, setAsking] = useState(false);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files?.[0]) {
-            setFile(e.target.files[0]);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const panelRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = panelRef.current;
+        if (!el) return;
+
+        if (isExpanded) {
+            el.style.height = '0px';
+            requestAnimationFrame(() => {
+                el.style.transition = 'height 300ms ease';
+                el.style.height = `${el.scrollHeight}px`;
+            });
+            const onEnd = () => {
+                el.style.height = 'auto';
+                el.removeEventListener('transitionend', onEnd);
+            };
+            el.addEventListener('transitionend', onEnd);
+        } else {
+            const current = el.getBoundingClientRect().height;
+            el.style.height = `${current}px`;
+            requestAnimationFrame(() => {
+                el.style.transition = 'height 300ms ease';
+                el.style.height = '0px';
+            });
         }
+    }, [isExpanded]);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files?.[0]) setFile(e.target.files[0]);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!isLoggedIn) {
-            router.push('/auth/login');
-            return;
-        }
-
-        if (!file) return;
-
+        if (!isLoggedIn) return router.push('/auth/login');
         if (!file) return;
 
         const formData = new FormData();
@@ -44,27 +65,28 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
         setOcrText('');
         setAnswer('');
         setQuestion('');
+        setIsExpanded(false);
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/upload`, {
-                method: 'POST',
-                body: formData,
-                credentials: 'include',
-            });
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/documents/upload`,
+                {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include',
+                }
+            );
+            const { documentId } = await res.json();
+            if (!documentId) throw new Error('Erro ao processar o upload');
+            setDocumentId(documentId);
 
-            const data = await response.json();
-            if (!data.documentId) throw new Error('Erro ao processar o upload');
+            const ocrRes = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}/ocr`,
+                { method: 'POST', credentials: 'include' }
+            );
+            const { text } = await ocrRes.json();
+            setOcrText(text || 'Nenhum texto extraído.');
 
-            setDocumentId(data.documentId);
-
-            const ocrResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/${data.documentId}/ocr`, {
-                method: 'POST',
-                credentials: 'include',
-            });
-
-            const ocr = await ocrResponse.json();
-            setOcrText(ocr.text || 'Nenhum texto extraído.');
-            
             if (onDataChange) onDataChange();
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -79,21 +101,20 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
 
     const handleAsk = async () => {
         if (!question.trim() || !documentId) return;
-
         setAsking(true);
         setAnswer('');
-
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}/ask`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question }),
-            });
-
-            const data = await response.json();
-            setAnswer(data.answer || 'Sem resposta disponível.');
-
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}/ask`,
+                {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question }),
+                }
+            );
+            const { answer } = await res.json();
+            setAnswer(answer || 'Sem resposta disponível.');
             if (onDataChange) onDataChange();
         } catch {
             setAnswer('Erro ao buscar resposta.');
@@ -103,11 +124,11 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
     };
 
     return (
-        <form onSubmit={handleSubmit} className={uploadStyles.wrapper}>
-            <label className={uploadStyles.label}>Selecione um PDF ou imagem:</label>
+        <form onSubmit={handleSubmit} className={styles.wrapper}>
+            <label className={styles.label}>Selecione um PDF ou imagem:</label>
 
-            <div className={uploadStyles.uploadGroup}>
-                <label htmlFor="file-upload" className={uploadStyles.uploadLabel}>
+            <div className={styles.uploadGroup}>
+                <label htmlFor="file-upload" className={styles.uploadLabel}>
                     Escolher arquivo
                 </label>
                 <input
@@ -115,36 +136,44 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                     type="file"
                     accept="application/pdf,image/*"
                     onChange={handleFileChange}
-                    className={uploadStyles.uploadInputHidden}
+                    className={styles.uploadInputHidden}
                 />
-                <span className={uploadStyles.uploadFilename}>
+                <span className={styles.uploadFilename}>
                     {file ? file.name : 'Nenhum arquivo escolhido'}
                 </span>
             </div>
 
-            <button
-                type="submit"
-                disabled={loading}
-                className={uploadStyles.button}
-            >
+            <button type="submit" disabled={loading} className={styles.button}>
                 {loading ? 'Enviando...' : 'Enviar documento'}
             </button>
 
             {ocrText && (
-                <div className={uploadStyles.resultBox}>
-                    <h2 className={uploadStyles.resultTitle}>Texto extraído:</h2>
-                    <pre className={uploadStyles.answerText}>{ocrText}</pre>
+                <div className={styles.resultBox}>
+                    <h2 className={styles.resultTitle}>Texto extraído</h2>
+                    <button
+                        type="button"
+                        className={styles.toggleButton}
+                        onClick={() => setIsExpanded((v) => !v)}
+                    >
+                        {isExpanded ? <ChevronUp /> : <ChevronDown />}
+                    </button>
+
+                    <div ref={panelRef} style={{ overflow: 'hidden', height: 0 }}>
+                        <div className={styles.answerText}>
+                            <ReactMarkdown>{ocrText}</ReactMarkdown>
+                        </div>
+                    </div>
                 </div>
             )}
 
             {ocrText && (
-                <div className={uploadStyles.askWrapper}>
-                    <label htmlFor="question" className={uploadStyles.label}>
-                        Pergunte algo sobre o documento:
+                <div className={styles.askWrapper}>
+                    <label htmlFor="question" className={styles.label}>
+                        Pergunte algo sobre o documento
                     </label>
                     <textarea
                         id="question"
-                        className={uploadStyles.askInput}
+                        className={styles.askInput}
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
                         placeholder="Digite sua pergunta aqui..."
@@ -156,25 +185,22 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                             type="button"
                             onClick={handleAsk}
                             disabled={asking}
-                            className={uploadStyles.button}
+                            className={styles.button}
                         >
                             {asking ? 'Perguntando...' : 'Perguntar'}
                         </button>
                     </div>
 
                     {answer && (
-                        <div className={uploadStyles.resultBox}>
-                            <h3 className={uploadStyles.resultTitle}>Resposta:</h3>
-                            <div className={uploadStyles.answerText}>
-                                <ReactMarkdown>
-                                    {answer}
-                                </ReactMarkdown>
+                        <div className={styles.resultBox}>
+                            <h3 className={styles.resultTitle}>Resposta</h3>
+                            <div className={styles.answerText}>
+                                <ReactMarkdown>{answer}</ReactMarkdown>
                             </div>
                         </div>
                     )}
                 </div>
             )}
-
         </form>
     );
 }
