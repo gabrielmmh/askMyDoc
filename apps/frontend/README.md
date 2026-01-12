@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# askMyDoc - Frontend
 
-## Getting Started
+Interface web do askMyDoc construida com Next.js 15 e React 19.
 
-First, run the development server:
+## Tecnologias
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js 15 (App Router)
+- React 19
+- TypeScript
+- CSS Modules
+- Poppins (fonte)
+
+## Estrutura
+
+```
+src/
+├── app/                    # Rotas do App Router
+│   ├── page.tsx           # Pagina principal (/)
+│   ├── layout.tsx         # Layout raiz
+│   └── auth/
+│       ├── login/         # Pagina de login
+│       └── register/      # Pagina de registro
+├── components/
+│   ├── home/
+│   │   ├── Header.tsx     # Cabecalho com auth
+│   │   ├── UploadForm.tsx # Formulario de upload
+│   │   ├── DocumentList.tsx # Lista de documentos
+│   │   └── DocumentCard.tsx # Card individual
+│   └── auth/
+│       ├── LoginForm.tsx  # Formulario de login
+│       └── RegisterForm.tsx # Formulario de registro
+├── lib/
+│   └── api.ts             # Cliente API centralizado
+└── styles/
+    ├── globals.css        # Estilos globais
+    ├── home/              # Estilos da home
+    └── auth/              # Estilos de auth
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Configuracao
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Crie um arquivo `.env` na raiz do frontend:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
 
-## Learn More
+## Comandos
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Desenvolvimento
+pnpm dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Build de producao
+pnpm build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Iniciar producao
+pnpm start
 
-## Deploy on Vercel
+# Lint
+pnpm lint
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Funcionalidades
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Upload de PDFs e imagens
+- Visualizacao do texto extraido (OCR)
+- Chat com IA sobre o documento
+- Download do documento com anotacoes
+- Autenticacao (email/senha e Google OAuth)
+- Interface responsiva
