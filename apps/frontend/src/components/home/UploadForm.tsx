@@ -28,15 +28,17 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
         const el = panelRef.current;
         if (!el) return;
 
+        let onEnd: (() => void) | null = null;
+
         if (isExpanded) {
             el.style.height = '0px';
             requestAnimationFrame(() => {
                 el.style.transition = 'height 300ms ease';
                 el.style.height = `${el.scrollHeight}px`;
             });
-            const onEnd = () => {
+            onEnd = () => {
                 el.style.height = 'auto';
-                el.removeEventListener('transitionend', onEnd);
+                el.removeEventListener('transitionend', onEnd!);
             };
             el.addEventListener('transitionend', onEnd);
         } else {
@@ -47,6 +49,12 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                 el.style.height = '0px';
             });
         }
+
+        return () => {
+            if (onEnd && el) {
+                el.removeEventListener('transitionend', onEnd);
+            }
+        };
     }, [isExpanded]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +84,12 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                     credentials: 'include',
                 }
             );
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(errorText || `Erro HTTP ${res.status}`);
+            }
+
             const { documentId } = await res.json();
             if (!documentId) throw new Error('Erro ao processar o upload');
             setDocumentId(documentId);
@@ -84,6 +98,12 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                 `${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}/ocr`,
                 { method: 'POST', credentials: 'include' }
             );
+
+            if (!ocrRes.ok) {
+                const errorText = await ocrRes.text();
+                throw new Error(errorText || `Erro HTTP ${ocrRes.status} no OCR`);
+            }
+
             const { text } = await ocrRes.json();
             setOcrText(text || 'Nenhum texto extraído.');
 
@@ -113,11 +133,21 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                     body: JSON.stringify({ question }),
                 }
             );
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(errorText || `Erro HTTP ${res.status}`);
+            }
+
             const { answer } = await res.json();
             setAnswer(answer || 'Sem resposta disponível.');
             if (onDataChange) onDataChange();
-        } catch {
-            setAnswer('Erro ao buscar resposta.');
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setAnswer(`Erro: ${error.message}`);
+            } else {
+                setAnswer('Erro ao buscar resposta.');
+            }
         } finally {
             setAsking(false);
         }
@@ -149,16 +179,19 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
 
             {ocrText && (
                 <div className={styles.resultBox}>
-                    <h2 className={styles.resultTitle}>Texto extraído</h2>
+                    <h2 id="ocr-text-heading" className={styles.resultTitle}>Texto extraído</h2>
                     <button
                         type="button"
                         className={styles.toggleButton}
                         onClick={() => setIsExpanded((v) => !v)}
+                        aria-expanded={isExpanded}
+                        aria-controls="ocr-text-panel"
+                        aria-label={isExpanded ? 'Recolher texto extraído' : 'Expandir texto extraído'}
                     >
                         {isExpanded ? <ChevronUp /> : <ChevronDown />}
                     </button>
 
-                    <div ref={panelRef} style={{ overflow: 'hidden', height: 0 }}>
+                    <div id="ocr-text-panel" ref={panelRef} style={{ overflow: 'hidden', height: 0 }} aria-labelledby="ocr-text-heading">
                         <div className={styles.answerText}>
                             <ReactMarkdown>{ocrText}</ReactMarkdown>
                         </div>
