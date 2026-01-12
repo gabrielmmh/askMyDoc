@@ -26,6 +26,8 @@ model Document {
   ocrResult   OcrResult?
   interactions Interaction[]
   createdAt   DateTime     @default(now())
+
+  @@index([userId])
 }
 
 model OcrResult {
@@ -43,4 +45,6 @@ model Interaction {
   question    String
   answer      String
   createdAt   DateTime  @default(now())
+
+  @@index([documentId])
 }
