@@ -145,3 +145,6 @@ apps/backend/uploads
 **/*.traineddata
 
 /tmp
+
+# Claude Code
+.claude/
