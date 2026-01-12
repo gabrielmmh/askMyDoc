@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import styles from '@/styles/home/documentList.module.css';
 import DocumentCard, { DocumentItem } from './DocumentCard';
+import { ANIMATION } from '@/lib/constants';
 
 interface Props {
     refreshSignal: boolean;
@@ -52,7 +53,7 @@ export default function DocumentList({ refreshSignal }: Props) {
     const handleOpen = (doc: DocumentItem) => {
         setDocToDelete(doc);
         setModalMount(true);
-        setTimeout(() => setIsModalVisible(true), 10);
+        setTimeout(() => setIsModalVisible(true), ANIMATION.REFLOW_DELAY_MS);
     };
 
     const handleClose = () => {
@@ -60,7 +61,7 @@ export default function DocumentList({ refreshSignal }: Props) {
         setTimeout(() => {
             setModalMount(false);
             setDocToDelete(null);
-        }, 300);
+        }, ANIMATION.MODAL_CLOSE_DELAY_MS);
     };
 
     const handleDelete = async () => {

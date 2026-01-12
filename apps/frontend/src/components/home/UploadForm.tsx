@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import styles from '@/styles/home/upload.module.css';
 import ReactMarkdown from 'react-markdown';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ANIMATION, UI } from '@/lib/constants';
 
 interface UploadFormProps {
     onDataChange?: () => void;
@@ -33,7 +34,7 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
         if (isExpanded) {
             el.style.height = '0px';
             requestAnimationFrame(() => {
-                el.style.transition = 'height 300ms ease';
+                el.style.transition = `height ${ANIMATION.COLLAPSE_DURATION_MS}ms ease`;
                 el.style.height = `${el.scrollHeight}px`;
             });
             onEnd = () => {
@@ -45,7 +46,7 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
             const current = el.getBoundingClientRect().height;
             el.style.height = `${current}px`;
             requestAnimationFrame(() => {
-                el.style.transition = 'height 300ms ease';
+                el.style.transition = `height ${ANIMATION.COLLAPSE_DURATION_MS}ms ease`;
                 el.style.height = '0px';
             });
         }
@@ -211,7 +212,7 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                         onChange={(e) => setQuestion(e.target.value)}
                         placeholder="Digite sua pergunta aqui..."
                         rows={3}
-                        maxLength={280}
+                        maxLength={UI.MAX_QUESTION_LENGTH}
                     />
                     <div className="mt-10">
                         <button

@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import styles from '@/styles/home/documentList.module.css';
 import ReactMarkdown from 'react-markdown';
 import { Trash2, DownloadCloud, ChevronDown, ChevronUp } from 'lucide-react';
+import { ANIMATION } from '@/lib/constants';
 
 interface Interaction {
     id: string;
@@ -32,7 +33,7 @@ function animateCollapse(el: HTMLElement | null, expand: boolean): (() => void) 
     if (expand) {
         el.style.height = '0px';
         requestAnimationFrame(() => {
-            el.style.transition = 'height 300ms ease';
+            el.style.transition = `height ${ANIMATION.COLLAPSE_DURATION_MS}ms ease`;
             el.style.height = `${el.scrollHeight}px`;
         });
         onEnd = () => {
@@ -44,7 +45,7 @@ function animateCollapse(el: HTMLElement | null, expand: boolean): (() => void) 
         const current = el.getBoundingClientRect().height;
         el.style.height = `${current}px`;
         requestAnimationFrame(() => {
-            el.style.transition = 'height 300ms ease';
+            el.style.transition = `height ${ANIMATION.COLLAPSE_DURATION_MS}ms ease`;
             el.style.height = '0px';
         });
     }
