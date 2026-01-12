@@ -26,7 +26,7 @@ export default function HomePage() {
         <p className="text-gray-700 text-lg">Carregue seu documento e tire dúvidas com a IA.</p>
 
         <UploadForm isLoggedIn={isLoggedIn} onDataChange={triggerRefresh} />
-        <DocumentList refreshSignal={refresh} />
+        {isLoggedIn && <DocumentList refreshSignal={refresh} />}
       </div>
     </main>
   );
