@@ -16,6 +16,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DocumentService } from './document.service';
 import { Request, Express, Response } from 'express';
 import { createReadStream } from 'fs';
+import { UPLOAD } from '../config/constants';
 
 @Controller('documents')
 export class DocumentController {
@@ -26,7 +27,7 @@ export class DocumentController {
   @UseInterceptors(
     FileInterceptor('file', {
       dest: './uploads',
-      limits: { fileSize: 10 * 1024 * 1024 },
+      limits: { fileSize: UPLOAD.MAX_FILE_SIZE_BYTES },
       fileFilter: (req, file, cb) => {
         if (
           file.mimetype === 'application/pdf' ||
