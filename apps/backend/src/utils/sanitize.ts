@@ -1,3 +1,4 @@
 export function cleanOcrText(input: string): string {
-    return input.replace(/\u0000/g, '').trim();
+  const nullChar = String.fromCharCode(0);
+  return input.split(nullChar).join('').trim();
 }
