@@ -7,15 +7,17 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { DocumentModule } from './document/document.module';
 import { join } from 'path';
+import appConfig from './config/app.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: join(__dirname, '..', '..', '..', '.env'),
       isGlobal: true,
+      load: [appConfig],
     }),
-    UserModule, 
-    PrismaModule, 
+    UserModule,
+    PrismaModule,
     AuthModule,
     DocumentModule
   ],
