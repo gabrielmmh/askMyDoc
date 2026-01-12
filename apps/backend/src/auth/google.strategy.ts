@@ -1,9 +1,14 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Strategy, StrategyOptions } from 'passport-google-oauth20';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
+
+interface GoogleProfile {
+    name: { givenName: string; familyName?: string };
+    emails?: Array<{ value: string; verified?: boolean }>;
+}
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -24,10 +29,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     async validate(
         accessToken: string,
         refreshToken: string,
-        profile: any,
-        done: (error: any, user?: any) => void,
-    ): Promise<any> {
+        profile: GoogleProfile,
+        done: (error: Error | null, user?: { id: string; email: string }) => void,
+    ): Promise<void> {
         const { name, emails } = profile;
+
+        if (!emails || emails.length === 0) {
+            throw new UnauthorizedException('Conta Google deve ter um email associado');
+        }
+
         const email = emails[0].value;
 
         const user = await this.userService.findOrCreate({
