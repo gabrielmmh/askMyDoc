@@ -12,6 +12,7 @@ import {
   runOcrOnImage,
   cleanOcrText,
 } from '../utils';
+import { OCR } from '../config/constants';
 
 @Injectable()
 export class DocumentService {
@@ -28,7 +29,6 @@ export class DocumentService {
       ? file.path
       : `${file.path}${ext}`;
 
-    // Renomeia o arquivo fisicamente para ter a extensão
     await fs.rename(file.path, fixedPath);
 
     const document = await this.prisma.document.create({
@@ -90,7 +90,7 @@ export class DocumentService {
     }
 
     this.logger.log(
-      `Realizando pergunta sobre o documento: "${question.substring(0, 50)}..."`,
+      `Realizando pergunta sobre o documento: "${question.substring(0, OCR.LOG_PREVIEW_LENGTH)}..."`,
     );
 
     const context = doc.ocrResult.content;
@@ -181,11 +181,7 @@ export class DocumentService {
     }
 
     if (document.filepath) {
-      try {
-        await fs.unlink(document.filepath);
-      } catch {
-        // arquivo pode já ter sido deletado após o OCR, então ignoramos erro
-      }
+      await fs.unlink(document.filepath).catch(() => {});
     }
 
     await this.prisma.interaction.deleteMany({ where: { documentId } });

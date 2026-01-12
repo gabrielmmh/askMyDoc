@@ -30,7 +30,7 @@ export async function runOcrOnPdf(filePath: string): Promise<string> {
   const files = await fs.readdir(dir);
   const images = files
     .filter((f) => f.startsWith(baseName) && f.endsWith('.png'))
-    .sort() // garante ordem correta das páginas
+    .sort()
     .map((f) => path.join(dir, f));
 
   if (images.length === 0) {
@@ -48,7 +48,6 @@ export async function runOcrOnPdf(filePath: string): Promise<string> {
       console.error(`[runOcrOnPdf] Falha no OCR da imagem ${img}`, err);
     }
 
-    // Limpeza
     await fs.unlink(img).catch(() => {});
   }
 

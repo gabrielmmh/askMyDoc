@@ -6,11 +6,13 @@ import {
   Req,
   Res,
   UseGuards,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { LoginDto, RegisterDto } from './dto';
+import { AUTH } from '../config/constants';
 
 @Controller('auth')
 export class AuthController {
@@ -28,7 +30,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
+      maxAge: AUTH.COOKIE_MAX_AGE_MS,
     });
 
     return { message: 'Login realizado com sucesso' };
@@ -41,9 +43,7 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  googleAuth() {
-    // redireciona automaticamente para o Google
-  }
+  googleAuth() {}
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
@@ -55,7 +55,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
+      maxAge: AUTH.COOKIE_MAX_AGE_MS,
     });
 
     const redirectUrl = process.env.FRONTEND_URL;
@@ -72,7 +72,9 @@ export class AuthController {
   @Get('logout')
   logout(@Res() res: Response) {
     res.clearCookie('access_token');
-    return res.status(200).json({ message: 'Logout realizado com sucesso' });
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'Logout realizado com sucesso' });
   }
 
   @Get('me')
