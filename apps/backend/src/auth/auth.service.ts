@@ -3,10 +3,15 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
 
+interface UserPayload {
+    id: string;
+    email: string;
+}
+
 @Injectable()
 export class AuthService {
     constructor(
-        private userService: UserService, 
+        private userService: UserService,
         private jwtService: JwtService
     ) { }
 
@@ -20,7 +25,7 @@ export class AuthService {
         return user;
     }
 
-    async login(user: any) {
+    async login(user: UserPayload) {
         return {
             access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
         };
@@ -36,9 +41,9 @@ export class AuthService {
         return this.login(user);
     }
 
-    async generateJwtToken(user: any) {
+    async generateJwtToken(user: UserPayload) {
         const payload = { sub: user.id, email: user.email };
         return this.jwtService.signAsync(payload);
     }
-      
+
 }

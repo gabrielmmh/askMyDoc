@@ -21,11 +21,13 @@ export class UserService {
         return this.prisma.user.create({ data });
     }
 
-    findOrCreate(data: { email: string; name: string; provider: string }) {
-        return this.prisma.user.findUnique({ where: { email: data.email } })
-            .then((user: User | null) => { // <--- AQUI ESTÁ A CORREÇÃO
-                if (user) return user;
-                return this.prisma.user.create({ data });
-            });
+    async findOrCreate(data: { email: string; name: string; provider: string }) {
+        const existingUser = await this.prisma.user.findUnique({
+            where: { email: data.email }
+        });
+
+        if (existingUser) return existingUser;
+
+        return this.prisma.user.create({ data });
     }
 }
