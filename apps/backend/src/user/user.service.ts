@@ -1,33 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User } from '@prisma/client'; // importa o tipo User
 
 @Injectable()
 export class UserService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-    async findByEmail(email: string) {
-        return this.prisma.user.findUnique({
-            where: { email },
-            select: {
-                id: true,
-                email: true,
-                password: true,
-            },
-        });
-    }
+  async findByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+      },
+    });
+  }
 
-    create(data: { name: string; email: string; password: string; provider: string }) {
-        return this.prisma.user.create({ data });
-    }
+  create(data: {
+    name: string;
+    email: string;
+    password: string;
+    provider: string;
+  }) {
+    return this.prisma.user.create({ data });
+  }
 
-    async findOrCreate(data: { email: string; name: string; provider: string }) {
-        const existingUser = await this.prisma.user.findUnique({
-            where: { email: data.email }
-        });
+  async findOrCreate(data: { email: string; name: string; provider: string }) {
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: data.email },
+    });
 
-        if (existingUser) return existingUser;
+    if (existingUser) return existingUser;
 
-        return this.prisma.user.create({ data });
-    }
+    return this.prisma.user.create({ data });
+  }
 }
