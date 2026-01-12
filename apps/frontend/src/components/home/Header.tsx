@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/home/header.module.css';
 
@@ -12,22 +12,23 @@ export default function Header({ onAuthChange }: Props) {
     const router = useRouter();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
+    const checkLogin = useCallback(async () => {
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+                credentials: 'include',
+            });
+            const loggedIn = res.ok;
+            setIsLoggedIn(loggedIn);
+            onAuthChange(loggedIn);
+        } catch {
+            setIsLoggedIn(false);
+            onAuthChange(false);
+        }
+    }, [onAuthChange]);
+
     useEffect(() => {
-        const checkLogin = async () => {
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
-                    credentials: 'include',
-                });
-                const loggedIn = res.ok;
-                setIsLoggedIn(loggedIn);
-                onAuthChange(loggedIn);
-            } catch {
-                setIsLoggedIn(false);
-                onAuthChange(false);
-            }
-        };
         checkLogin();
-    }, []);
+    }, [checkLogin]);
 
     const handleLogout = async () => {
         await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {

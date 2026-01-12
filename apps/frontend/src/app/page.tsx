@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Header from '@/components/home/Header';
 import UploadForm from '@/components/home/UploadForm';
 import DocumentList from '@/components/home/DocumentList';
@@ -11,12 +11,12 @@ export default function HomePage() {
   const [refresh, setRefresh] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const triggerRefresh = () => setRefresh(prev => !prev);
+  const triggerRefresh = useCallback(() => setRefresh(prev => !prev), []);
 
-  const handleAuthChange = (logged: boolean) => {
+  const handleAuthChange = useCallback((logged: boolean) => {
     setIsLoggedIn(logged);
     triggerRefresh();
-  };
+  }, [triggerRefresh]);
 
   return (
     <main className={headerStyles.container}>
