@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
+import { AUTH } from '../config/constants';
 
 interface UserPayload {
   id: string;
@@ -32,7 +33,7 @@ export class AuthService {
   }
 
   async register(data: { email: string; password: string; name: string }) {
-    const hashed = await bcrypt.hash(data.password, 10);
+    const hashed = await bcrypt.hash(data.password, AUTH.BCRYPT_SALT_ROUNDS);
     const user = await this.userService.create({
       ...data,
       password: hashed,

@@ -1,10 +1,13 @@
 import { IsEmail, IsString, MinLength } from 'class-validator';
+import { VALIDATION } from '../../config/constants';
 
 export class LoginDto {
   @IsEmail({}, { message: 'Email deve ser um endereço de email válido' })
   email: string;
 
   @IsString({ message: 'Senha deve ser uma string' })
-  @MinLength(6, { message: 'Senha deve ter pelo menos 6 caracteres' })
+  @MinLength(VALIDATION.MIN_PASSWORD_LENGTH, {
+    message: `Senha deve ter pelo menos ${VALIDATION.MIN_PASSWORD_LENGTH} caracteres`,
+  })
   password: string;
 }
