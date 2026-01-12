@@ -10,7 +10,6 @@ interface PdfParseResult {
 
 export async function extractTextFromPdf(filePath: string): Promise<string | null> {
     try {
-        console.log("aqui?");
         const buffer = await fs.readFile(filePath);
         const data = await pdfParse(buffer);
         const extracted = data.text?.trim();

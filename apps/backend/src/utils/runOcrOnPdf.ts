@@ -20,9 +20,7 @@ export async function runOcrOnPdf(filePath: string): Promise<string> {
     const outputImageBase = `${outputBase}_page`;
 
     // Converte o PDF em PNGs usando pdftoppm
-    console.log("antes do comando");
     await execShellCommand(`pdftoppm -png "${filePath}" "${outputImageBase}"`);
-    console.log("depois do comando");
 
     const dir = path.dirname(filePath);
     const baseName = path.basename(outputImageBase);

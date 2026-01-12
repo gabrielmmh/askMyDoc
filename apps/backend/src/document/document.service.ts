@@ -1,19 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import * as Tesseract from 'tesseract.js';
 import * as fs from 'fs/promises';
+import * as fsSync from 'fs';
+import * as path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 import { Express } from 'express';
 import { LlmService } from './llm.service';
-import { writeFileSync } from 'fs';
-import { join } from 'path';
-import { v4 as uuidv4 } from 'uuid';
-import * as path from 'path';
-import * as fsSync from 'fs';
-import { extractTextFromPdf, runOcrOnPdf, runOcrOnImage, cleanOcrText} from '../utils';
+import { extractTextFromPdf, runOcrOnPdf, runOcrOnImage, cleanOcrText } from '../utils';
 
 
 @Injectable()
 export class DocumentService {
+    private readonly logger = new Logger(DocumentService.name);
+
     constructor(
         private readonly prisma: PrismaService,
         private readonly llmService: LlmService,
@@ -34,7 +33,7 @@ export class DocumentService {
             },
         });
 
-        console.log(`[UPLOAD] Documento "${file.originalname}" salvo com sucesso.`);
+        this.logger.log(`Documento "${file.originalname}" salvo com sucesso`);
 
         return {
             message: 'Upload realizado com sucesso',
@@ -80,7 +79,7 @@ export class DocumentService {
             throw new NotFoundException('Documento não encontrado ou sem resultado de OCR');
         }
 
-        console.log(`[LLM] Realizando pergunta sobre o documento: "${question}"`);
+        this.logger.log(`Realizando pergunta sobre o documento: "${question.substring(0, 50)}..."`);
 
         const context = doc.ocrResult.content;
 
@@ -88,7 +87,7 @@ export class DocumentService {
 
         const response = await this.llmService.ask(prompt);
 
-        console.log(`[LLM] Resposta gerada com sucesso.`);
+        this.logger.log('Resposta gerada com sucesso');
 
         await this.prisma.interaction.create({
             data: {
@@ -147,9 +146,9 @@ export class DocumentService {
     const finalText = content.join('\n');
 
     const filename = `document_${uuidv4()}.txt`;
-    const filePath = join(__dirname, '../../tmp', filename);
+    const filePath = path.join(__dirname, '../../tmp', filename);
 
-    writeFileSync(filePath, finalText);
+    fsSync.writeFileSync(filePath, finalText);
     return filePath;
     }
 
