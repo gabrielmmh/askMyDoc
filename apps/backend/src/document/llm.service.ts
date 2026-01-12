@@ -18,7 +18,7 @@ export class LlmService {
 
     async ask(prompt: string): Promise<string> {
         const completion = await this.openai.chat.completions.create({
-            model: 'deepseek/deepseek-r1-0528-qwen3-8b:free',
+            model: 'meta-llama/llama-3.2-3b-instruct:free',
             messages: [
                 {
                     role: 'user',
