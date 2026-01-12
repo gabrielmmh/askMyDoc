@@ -44,8 +44,6 @@ export class DocumentController {
         @UploadedFile() file: Express.Multer.File,
         @Req() req: Request,
     ) {
-        console.log('req.user:', req.user);
-
         const user = req.user as { sub: string };
         const result = await this.documentService.saveDocument(user.sub, file);
         return result;
@@ -54,8 +52,8 @@ export class DocumentController {
     @UseGuards(JwtAuthGuard)
     @Post(':id/ocr')
     async runOcr(@Param('id') documentId: string, @Req() req: Request) {
-        const user = req.user as { sub: string; email: string };
-        return this.documentService.processOcr(documentId, user.sub);
+        const user = req.user as { sub: string };
+        return await this.documentService.processOcr(documentId, user.sub);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -66,14 +64,14 @@ export class DocumentController {
         @Body('question') question: string
     ) {
         const user = req.user as { sub: string };
-        return this.documentService.askQuestion(id, user.sub, question);
+        return await this.documentService.askQuestion(id, user.sub, question);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get()
     async getAllDocuments(@Req() req: Request) {
-        const user = req.user as any;
-        return this.documentService.findAllByUser(user.id);
+        const user = req.user as { sub: string };
+        return await this.documentService.findAllByUser(user.sub);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -96,12 +94,12 @@ export class DocumentController {
 
     @UseGuards(JwtAuthGuard)
     @Delete(':id')
-    async delete (
+    async delete(
         @Param('id') id: string,
-            @Req() req: Request
+        @Req() req: Request
     ) {
         const user = req.user as { sub: string };
-        return this.documentService.deleteDocument(id, user.sub);
+        return await this.documentService.deleteDocument(id, user.sub);
     }
 
 }
