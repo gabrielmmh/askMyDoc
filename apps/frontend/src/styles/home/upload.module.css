@@ -74,5 +74,5 @@
 }
 
 .toggleButton {
-    @apply mt-2 text-black border-none bg-transparent cursor-auto hover:text-amber-600 transition duration-500;
+    @apply mt-2 text-black border-none bg-transparent cursor-pointer hover:text-amber-600 transition duration-500;
 }
