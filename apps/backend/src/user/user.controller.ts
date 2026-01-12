@@ -4,12 +4,12 @@ import { Request as ExpressRequest } from 'express';
 
 @Controller('user')
 export class UserController {
-    @UseGuards(JwtAuthGuard)
-    @Get('profile')
-    getProfile(@Request() req: ExpressRequest) {
-        return {
-            message: 'Rota protegida!',
-            user: req.user,
-        };
-    }
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req: ExpressRequest) {
+    return {
+      message: 'Rota protegida!',
+      user: req.user,
+    };
+  }
 }

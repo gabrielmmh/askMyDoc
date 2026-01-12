@@ -5,8 +5,8 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { LlmService } from './llm.service';
 
 @Module({
-    imports: [PrismaModule],
-    controllers: [DocumentController],
-    providers: [DocumentService, LlmService],
+  imports: [PrismaModule],
+  controllers: [DocumentController],
+  providers: [DocumentService, LlmService],
 })
-export class DocumentModule { }
+export class DocumentModule {}

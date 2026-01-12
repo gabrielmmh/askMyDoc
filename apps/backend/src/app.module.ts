@@ -19,7 +19,7 @@ import appConfig from './config/app.config';
     UserModule,
     PrismaModule,
     AuthModule,
-    DocumentModule
+    DocumentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
