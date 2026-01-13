@@ -1,21 +1,41 @@
 @reference "tailwindcss";
 
+.header {
+    @apply sticky top-0 z-40 bg-white/80 backdrop-blur-md
+           border-b border-slate-100 shadow-sm;
+}
+
 .container {
-    @apply min-h-screen flex flex-col bg-gray-50 px-4 pt-8;
+    @apply max-w-5xl mx-auto px-4 sm:px-6 h-16
+           flex items-center justify-between;
+}
+
+.logo {
+    @apply text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600
+           bg-clip-text text-transparent;
+}
+
+.nav {
+    @apply flex items-center gap-3;
 }
 
 .navButton {
-    @apply bg-white text-gray-900 font-medium py-2.5 px-6 rounded-lg text-sm cursor-pointer
-           border border-gray-300
-           hover:border-amber-600 hover:text-amber-600
-           transition-colors duration-200
+    @apply bg-white text-slate-900 font-medium py-2 px-5 rounded-lg text-sm cursor-pointer
+           border border-slate-300
+           hover:border-emerald-600 hover:text-emerald-600 hover:shadow-md
+           transition-all duration-200
            disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
-.linkText {
-    @apply text-center text-sm text-gray-600;
+.navButtonPrimary {
+    @apply bg-emerald-600 text-white font-medium py-2 px-5 rounded-lg text-sm cursor-pointer
+           shadow-sm hover:shadow-md
+           hover:bg-emerald-700
+           transition-all duration-200;
 }
 
-.link {
-    @apply text-amber-600 hover:underline;
+.navButtonGhost {
+    @apply text-slate-700 font-medium py-2 px-4 rounded-lg text-sm cursor-pointer
+           hover:bg-slate-100 hover:text-slate-900
+           transition-colors duration-200;
 }

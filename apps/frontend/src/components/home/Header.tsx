@@ -40,21 +40,26 @@ export default function Header({ onAuthChange }: Props) {
     };
 
     return (
-        <header className="flex justify-end space-x-4 mb-8">
-            {isLoggedIn ? (
-                <button onClick={handleLogout} className={styles.navButton}>
-                    Sair
-                </button>
-            ) : (
-                <>
-                    <button onClick={() => router.push('/auth/login')} className={styles.navButton}>
-                        Entrar
-                    </button>
-                    <button onClick={() => router.push('/auth/register')} className={styles.navButton}>
-                        Criar conta
-                    </button>
-                </>
-            )}
+        <header className={styles.header}>
+            <div className={styles.container}>
+                <span className={styles.logo}>AskMyDoc</span>
+                <nav className={styles.nav}>
+                    {isLoggedIn ? (
+                        <button onClick={handleLogout} className={styles.navButton}>
+                            Sair
+                        </button>
+                    ) : (
+                        <>
+                            <button onClick={() => router.push('/auth/login')} className={styles.navButtonGhost}>
+                                Entrar
+                            </button>
+                            <button onClick={() => router.push('/auth/register')} className={styles.navButtonPrimary}>
+                                Criar conta
+                            </button>
+                        </>
+                    )}
+                </nav>
+            </div>
         </header>
     );
 }
