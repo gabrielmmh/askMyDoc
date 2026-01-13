@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/home/upload.module.css';
 import ReactMarkdown from 'react-markdown';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { ANIMATION, UI } from '@/lib/constants';
 
 interface UploadFormProps {
@@ -175,6 +175,7 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
             </div>
 
             <button type="submit" disabled={loading} className={styles.button}>
+                {loading && <span className="spinner" />}
                 {loading ? 'Enviando...' : 'Enviar documento'}
             </button>
 
@@ -189,7 +190,7 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                         aria-controls="ocr-text-panel"
                         aria-label={isExpanded ? 'Recolher texto extraído' : 'Expandir texto extraído'}
                     >
-                        {isExpanded ? <ChevronUp /> : <ChevronDown />}
+                        <ChevronDown className={`chevron-icon ${isExpanded ? 'chevron-expanded' : ''}`} />
                     </button>
 
                     <div id="ocr-text-panel" ref={panelRef} style={{ overflow: 'hidden', height: 0 }} aria-labelledby="ocr-text-heading">
@@ -221,6 +222,7 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                             disabled={asking}
                             className={styles.button}
                         >
+                            {asking && <span className="spinner" />}
                             {asking ? 'Perguntando...' : 'Perguntar'}
                         </button>
                     </div>
