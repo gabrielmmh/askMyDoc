@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/home/upload.module.css';
 import ReactMarkdown from 'react-markdown';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Upload } from 'lucide-react';
 import { ANIMATION, UI } from '@/lib/constants';
 
 interface UploadFormProps {
@@ -21,6 +21,7 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
     const [answer, setAnswer] = useState('');
     const [documentId, setDocumentId] = useState('');
     const [asking, setAsking] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
 
     const [isExpanded, setIsExpanded] = useState(false);
     const panelRef = useRef<HTMLDivElement>(null);
@@ -60,6 +61,28 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0]) setFile(e.target.files[0]);
+    };
+
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const droppedFile = e.dataTransfer.files[0];
+        if (droppedFile) {
+            const isValidType = droppedFile.type === 'application/pdf' || droppedFile.type.startsWith('image/');
+            if (isValidType) {
+                setFile(droppedFile);
+            }
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -154,14 +177,29 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
         }
     };
 
+    const getDropzoneClassName = () => {
+        let className = styles.dropzone;
+        if (isDragging) className += ` ${styles.dropzoneDragging}`;
+        else if (file) className += ` ${styles.dropzoneHasFile}`;
+        return className;
+    };
+
     return (
         <form onSubmit={handleSubmit} className={styles.wrapper}>
-            <label className={styles.label}>Selecione um PDF ou imagem:</label>
-
-            <div className={styles.uploadGroup}>
-                <label htmlFor="file-upload" className={styles.uploadLabel}>
-                    Escolher arquivo
-                </label>
+            <div
+                className={getDropzoneClassName()}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => document.getElementById('file-upload')?.click()}
+            >
+                <Upload className={styles.dropzoneIcon} />
+                <p className={styles.dropzoneText}>
+                    {file ? 'Arquivo selecionado' : 'Arraste seu arquivo aqui'}
+                </p>
+                <p className={styles.dropzoneSubtext}>
+                    {file ? '' : 'ou clique para selecionar'}
+                </p>
                 <input
                     id="file-upload"
                     type="file"
@@ -169,29 +207,36 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                     onChange={handleFileChange}
                     className={styles.uploadInputHidden}
                 />
-                <span className={styles.uploadFilename}>
-                    {file ? file.name : 'Nenhum arquivo escolhido'}
-                </span>
+                {!file && (
+                    <span className={styles.uploadLabel}>
+                        Escolher arquivo
+                    </span>
+                )}
+                {file && (
+                    <p className={styles.dropzoneFilename}>{file.name}</p>
+                )}
             </div>
 
-            <button type="submit" disabled={loading} className={styles.button}>
+            <button type="submit" disabled={loading || !file} className={styles.button}>
                 {loading && <span className="spinner" />}
                 {loading ? 'Enviando...' : 'Enviar documento'}
             </button>
 
             {ocrText && (
                 <div className={styles.resultBox}>
-                    <h2 id="ocr-text-heading" className={styles.resultTitle}>Texto extraído</h2>
-                    <button
-                        type="button"
-                        className={styles.toggleButton}
-                        onClick={() => setIsExpanded((v) => !v)}
-                        aria-expanded={isExpanded}
-                        aria-controls="ocr-text-panel"
-                        aria-label={isExpanded ? 'Recolher texto extraído' : 'Expandir texto extraído'}
-                    >
-                        <ChevronDown className={`chevron-icon ${isExpanded ? 'chevron-expanded' : ''}`} />
-                    </button>
+                    <div className="flex items-center justify-between">
+                        <h2 id="ocr-text-heading" className={styles.resultTitle}>Texto extraído</h2>
+                        <button
+                            type="button"
+                            className={styles.toggleButton}
+                            onClick={() => setIsExpanded((v) => !v)}
+                            aria-expanded={isExpanded}
+                            aria-controls="ocr-text-panel"
+                            aria-label={isExpanded ? 'Recolher texto extraído' : 'Expandir texto extraído'}
+                        >
+                            <ChevronDown className={`chevron-icon ${isExpanded ? 'chevron-expanded' : ''}`} />
+                        </button>
+                    </div>
 
                     <div id="ocr-text-panel" ref={panelRef} style={{ overflow: 'hidden', height: 0 }} aria-labelledby="ocr-text-heading">
                         <div className={styles.answerText}>
@@ -215,7 +260,7 @@ export default function UploadForm({ onDataChange, isLoggedIn }: UploadFormProps
                         rows={3}
                         maxLength={UI.MAX_QUESTION_LENGTH}
                     />
-                    <div className="mt-10">
+                    <div className="mt-6">
                         <button
                             type="button"
                             onClick={handleAsk}

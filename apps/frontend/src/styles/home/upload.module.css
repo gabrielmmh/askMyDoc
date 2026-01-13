@@ -1,74 +1,95 @@
 @reference "tailwindcss";
 
 .wrapper {
-    @apply flex flex-col items-center w-full mt-4 space-y-6;
+    @apply flex flex-col items-center w-full space-y-6;
 }
 
 .label {
-    @apply text-base font-medium text-gray-700 text-start mb-2;
+    @apply text-base font-medium text-slate-700 text-start mb-2;
 }
 
-.resultBox {
-    @apply bg-white text-gray-900 p-6 rounded-lg w-full mt-8 max-w-3xl shadow-md border border-gray-200
-           hover:shadow-lg transition-shadow duration-300;
+.dropzone {
+    @apply w-full max-w-xl border-2 border-dashed border-slate-300 rounded-xl p-8
+           bg-slate-50 text-center
+           transition-all duration-300 cursor-pointer
+           hover:border-emerald-400 hover:bg-emerald-50/50;
 }
 
-.resultTitle {
-    @apply text-lg sm:text-xl text-start font-semibold mb-4;
+.dropzoneDragging {
+    @apply border-emerald-500 bg-emerald-50 scale-[1.02];
 }
 
-.button {
-    @apply bg-amber-600 text-white font-medium py-2.5 px-6 rounded-lg
-           hover:bg-amber-700 active:bg-amber-800
-           transition-colors duration-200 cursor-pointer
-           disabled:opacity-50 disabled:cursor-not-allowed
-           inline-flex items-center justify-center gap-2;
+.dropzoneHasFile {
+    @apply border-emerald-500 bg-emerald-50/30;
 }
 
-.askWrapper {
-    @apply mt-8 w-full max-w-3xl flex flex-col;
+.dropzoneIcon {
+    @apply w-12 h-12 mx-auto text-emerald-600 mb-4;
 }
 
-.askInput {
-    @apply w-full px-4 py-2.5 bg-white rounded-lg
-           border border-gray-300 text-gray-900 text-sm shadow-sm
-           transition-all duration-200
-           hover:border-gray-400
-           focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-100;
+.dropzoneText {
+    @apply text-slate-700 font-medium mb-1;
 }
 
-.answerBox {
-    @apply mt-6 p-4 border rounded bg-gray-100 w-full;
+.dropzoneSubtext {
+    @apply text-sm text-slate-500 mb-4;
 }
 
-.answerTitle {
-    @apply text-sm font-semibold text-amber-600 mb-1;
-}
-
-.answerText {
-    @apply text-gray-900 whitespace-pre-wrap;
-}
-
-.uploadGroup {
-    @apply flex items-center gap-3;
+.dropzoneFilename {
+    @apply text-sm text-emerald-700 font-medium mt-2;
 }
 
 .uploadLabel {
-    @apply bg-white text-gray-900 font-medium py-1.5 px-6 rounded-lg text-sm
-           border border-gray-300 cursor-pointer
-           hover:border-amber-600 hover:text-amber-600
-           transition-colors duration-200;
+    @apply inline-flex items-center justify-center
+           bg-white text-slate-900 font-medium py-2 px-5 rounded-lg text-sm
+           border border-slate-300 cursor-pointer
+           hover:border-emerald-600 hover:text-emerald-600 hover:shadow-md
+           transition-all duration-200;
 }
 
 .uploadInputHidden {
     @apply hidden;
 }
 
-.uploadFilename {
-    @apply text-sm text-gray-700;
+.button {
+    @apply bg-emerald-600 text-white font-medium py-3 px-8 rounded-lg
+           shadow-sm hover:shadow-md
+           hover:bg-emerald-700 active:bg-emerald-800
+           transition-all duration-200 cursor-pointer
+           disabled:opacity-50 disabled:cursor-not-allowed
+           inline-flex items-center justify-center gap-2;
+}
+
+.resultBox {
+    @apply bg-white text-slate-900 p-6 rounded-xl w-full mt-6 max-w-3xl
+           shadow-sm border border-slate-100
+           hover:shadow-md transition-shadow duration-300;
+}
+
+.resultTitle {
+    @apply text-lg sm:text-xl text-start font-semibold text-slate-900 mb-4;
+}
+
+.askWrapper {
+    @apply mt-6 w-full max-w-3xl flex flex-col;
+}
+
+.askInput {
+    @apply w-full px-4 py-3 bg-white rounded-lg
+           border border-slate-300 text-slate-900 text-base
+           placeholder:text-slate-400 shadow-sm
+           transition-all duration-200
+           hover:border-slate-400
+           focus:outline-none focus:border-emerald-600
+           focus:ring-2 focus:ring-emerald-100 focus:shadow-md;
+}
+
+.answerText {
+    @apply text-slate-700 whitespace-pre-wrap leading-relaxed;
 }
 
 .toggleButton {
-    @apply mt-2 text-gray-600 border-none bg-transparent cursor-pointer
-           hover:text-amber-600 transition-colors duration-200;
+    @apply p-2 rounded-lg text-slate-500
+           hover:bg-slate-100 hover:text-slate-700
+           transition-colors duration-200 cursor-pointer;
 }
