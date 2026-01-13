@@ -63,7 +63,7 @@
 }
 
 .iconButton {
-    @apply p-2 text-slate-400 cursor-pointer
+    @apply p-2 text-slate-400 cursor-pointer border-none bg-transparent
            hover:text-slate-600
            transition-colors duration-200;
 }
@@ -90,7 +90,7 @@
 }
 
 .toggleButton {
-    @apply p-2 text-slate-400 cursor-pointer
+    @apply p-2 text-slate-400 cursor-pointer border-none bg-transparent
            hover:text-slate-600
            transition-colors duration-200;
 }
