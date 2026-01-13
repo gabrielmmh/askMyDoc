@@ -63,8 +63,8 @@
 }
 
 .iconButton {
-    @apply p-2.5 rounded-lg text-slate-500 cursor-pointer
-           hover:bg-slate-100 hover:text-slate-700
+    @apply p-2 text-slate-400 cursor-pointer
+           hover:text-slate-600
            transition-colors duration-200;
 }
 
@@ -90,9 +90,9 @@
 }
 
 .toggleButton {
-    @apply p-2 rounded-lg text-slate-500
-           hover:bg-slate-100 hover:text-slate-700
-           transition-colors duration-200 cursor-pointer;
+    @apply p-2 text-slate-400 cursor-pointer
+           hover:text-slate-600
+           transition-colors duration-200;
 }
 
 .modalOverlay {
