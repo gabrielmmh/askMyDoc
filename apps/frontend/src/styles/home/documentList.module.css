@@ -1,45 +1,57 @@
 @reference "tailwindcss";
 
 .wrapper {
-    @apply flex flex-col items-center w-full mt-6 space-y-6;
+    @apply flex flex-col items-center w-full space-y-6;
 }
 
 .title {
-    @apply text-xl sm:text-2xl font-semibold text-amber-600;
+    @apply text-xl sm:text-2xl font-semibold text-emerald-600;
 }
 
 .loadingText {
-    @apply text-gray-600 text-sm;
+    @apply text-slate-500 text-sm;
 }
 
 .card {
-    @apply bg-white text-base text-start text-gray-900 p-6 rounded-lg w-full max-w-3xl
-           shadow-md border border-gray-200 space-y-4
-           hover:shadow-lg transition-shadow duration-300;
+    @apply bg-white text-base text-start text-slate-900 p-6 rounded-xl w-full max-w-3xl
+           shadow-sm border border-slate-100 space-y-4
+           hover:shadow-lg transition-all duration-300;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.cardHeader {
+    @apply flex items-center gap-4;
+}
+
+.fileIcon {
+    @apply w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600
+           flex items-center justify-center flex-shrink-0;
+}
+
+.fileInfo {
+    @apply flex-1 min-w-0;
 }
 
 .filename {
-    @apply text-lg font-semibold text-gray-900;
+    @apply font-semibold text-slate-900 truncate;
 }
 
 .createdAt {
-    @apply text-sm text-gray-600;
+    @apply text-sm text-slate-500;
 }
 
-.ocrText {
-    @apply text-sm text-gray-800 whitespace-pre-wrap bg-gray-50 p-3 rounded-md border border-gray-200;
+.statusBadge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full
+           bg-green-100 text-green-700 text-xs font-medium;
 }
 
-.interactions {
-    @apply my-5 text-start block text-base;
-}
-
-.interactionsList {
-    @apply text-sm text-gray-800 space-y-1 text-start;
-}
-
-.downloadLink {
-    @apply inline-block mt-2 text-amber-600 hover:underline text-sm font-medium;
+.actions {
+    @apply flex items-center gap-1;
 }
 
 .header {
@@ -47,18 +59,45 @@
 }
 
 .headerButtons {
-    @apply flex items-center space-x-2;
+    @apply flex items-center gap-1;
 }
 
 .iconButton {
-    @apply p-2 rounded-lg text-gray-600 cursor-pointer
-           hover:bg-gray-100 hover:text-gray-900
+    @apply p-2.5 rounded-lg text-slate-500 cursor-pointer
+           hover:bg-slate-100 hover:text-slate-700
            transition-colors duration-200;
+}
+
+.ocrText {
+    @apply text-sm text-slate-700 whitespace-pre-wrap leading-relaxed
+           bg-slate-50 p-4 rounded-lg border border-slate-100;
+}
+
+.sectionTitle {
+    @apply font-medium text-slate-900 flex items-center gap-2;
+}
+
+.interactions {
+    @apply my-4 text-start block text-base font-medium text-slate-900;
+}
+
+.interactionsList {
+    @apply text-sm text-slate-700 space-y-3 text-start;
+}
+
+.downloadLink {
+    @apply inline-block mt-2 text-emerald-600 hover:text-emerald-700 hover:underline text-sm font-medium;
+}
+
+.toggleButton {
+    @apply p-2 rounded-lg text-slate-500
+           hover:bg-slate-100 hover:text-slate-700
+           transition-colors duration-200 cursor-pointer;
 }
 
 .modalOverlay {
     @apply fixed inset-0 flex items-center justify-center z-50
-           bg-black/50 backdrop-blur-sm
+           bg-slate-900/40 backdrop-blur-sm
            opacity-0 pointer-events-none transition-opacity duration-300;
 }
 
@@ -67,7 +106,7 @@
 }
 
 .modal {
-    @apply bg-white p-6 rounded-xl shadow-xl max-w-sm w-full
+    @apply bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full mx-4
            transform scale-95 opacity-0 transition-all duration-300;
 }
 
@@ -75,24 +114,28 @@
     @apply scale-100 opacity-100;
 }
 
+.modalTitle {
+    @apply text-lg font-semibold text-slate-900 mb-2;
+}
+
+.modalText {
+    @apply text-slate-600 mb-6;
+}
+
 .modalActions {
-    @apply mt-4 flex flex-row justify-center gap-4;
+    @apply flex flex-row justify-end gap-3;
 }
 
 .confirmDelete {
-    @apply bg-red-600 text-white font-medium py-2 px-4 rounded-lg cursor-pointer
+    @apply bg-red-600 text-white font-medium py-2.5 px-5 rounded-lg cursor-pointer
+           shadow-sm hover:shadow-md
            hover:bg-red-700 active:bg-red-800
-           transition-colors duration-200;
+           transition-all duration-200;
 }
 
 .cancel {
-    @apply bg-white text-gray-900 font-medium py-2 px-4 rounded-lg cursor-pointer
-           border border-gray-300
-           hover:border-amber-600 hover:text-amber-600
-           transition-colors duration-200;
-}
-
-.toggleButton {
-    @apply mt-2 text-gray-600 border-none bg-transparent cursor-pointer
-           hover:text-amber-600 transition-colors duration-200;
+    @apply bg-white text-slate-900 font-medium py-2.5 px-5 rounded-lg cursor-pointer
+           border border-slate-300
+           hover:border-emerald-600 hover:text-emerald-600 hover:shadow-md
+           transition-all duration-200;
 }
