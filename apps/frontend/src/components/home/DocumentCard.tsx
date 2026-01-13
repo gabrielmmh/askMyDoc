@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import styles from '@/styles/home/documentList.module.css';
 import ReactMarkdown from 'react-markdown';
-import { Trash2, DownloadCloud, ChevronDown, ChevronUp } from 'lucide-react';
+import { Trash2, DownloadCloud, ChevronDown } from 'lucide-react';
 import { ANIMATION } from '@/lib/constants';
 
 interface Interaction {
@@ -111,7 +111,7 @@ export default function DocumentCard({ doc, onDelete }: DocumentCardProps) {
                 aria-controls={`text-panel-${doc.id}`}
                 aria-label={textExpanded ? 'Recolher texto extraído' : 'Expandir texto extraído'}
             >
-                {textExpanded ? <ChevronUp /> : <ChevronDown />}
+                <ChevronDown className={`chevron-icon ${textExpanded ? 'chevron-expanded' : ''}`} />
             </button>
             <div id={`text-panel-${doc.id}`} ref={textRef} style={{ overflow: 'hidden', height: 0 }} aria-labelledby={`text-heading-${doc.id}`}>
                 <div className={styles.ocrText}>
@@ -130,7 +130,7 @@ export default function DocumentCard({ doc, onDelete }: DocumentCardProps) {
                         aria-controls={`inter-panel-${doc.id}`}
                         aria-label={interExpanded ? 'Recolher interações' : 'Expandir interações'}
                     >
-                        {interExpanded ? <ChevronUp /> : <ChevronDown />}
+                        <ChevronDown className={`chevron-icon ${interExpanded ? 'chevron-expanded' : ''}`} />
                     </button>
                     <div id={`inter-panel-${doc.id}`} ref={interRef} style={{ overflow: 'hidden', height: 0 }} aria-labelledby={`inter-heading-${doc.id}`}>
                         {doc.interactions.map((inter) => (
